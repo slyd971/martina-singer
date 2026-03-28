@@ -58,6 +58,22 @@ export default function Home() {
     window.localStorage.setItem('site-theme', themeMode);
   }, [themeMode]);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const closeOnScroll = () => {
+      setMobileMenuOpen(false);
+    };
+
+    window.addEventListener('scroll', closeOnScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', closeOnScroll);
+    };
+  }, [mobileMenuOpen]);
+
   const renderLuxuryMinimal = () => (
     <motion.section
       className="hero-shell hero-luxury relative flex min-h-screen w-full items-center overflow-hidden bg-[#0d0907]"
@@ -533,8 +549,11 @@ export default function Home() {
       data-site-theme={themeMode}
     >
       <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-8 sm:pt-6">
-        <div className="site-header-shell mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/15 bg-black/35 px-4 py-3 backdrop-blur-xl sm:px-6">
-          <a href="#top" className="text-sm font-black tracking-[0.35em] text-white uppercase">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-0 py-0 sm:px-6 lg:site-header-shell lg:rounded-full lg:border lg:border-white/15 lg:bg-black/35 lg:px-4 lg:py-3 lg:backdrop-blur-xl">
+          <a
+            href="#top"
+            className="hidden text-sm font-black tracking-[0.35em] text-white uppercase lg:inline-flex"
+          >
             SLY&apos;D
           </a>
 
@@ -553,101 +572,32 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="theme-chip flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/8 lg:hidden"
+            className="ml-auto flex h-10 w-10 items-center justify-center lg:hidden"
             aria-label="Toggle navigation"
           >
             <span className="space-y-1.5">
-              <span className="block h-px w-4 bg-white" />
-              <span className="block h-px w-4 bg-white" />
-              <span className="block h-px w-4 bg-white" />
+              <span className="block h-px w-4 bg-white/90 transition-transform" />
+              <span className="block h-px w-4 bg-white/90 transition-transform" />
+              <span className="block h-px w-4 bg-white/90 transition-transform" />
             </span>
           </button>
         </div>
 
         {mobileMenuOpen ? (
-          <div className="mobile-menu-shell mx-auto mt-3 max-w-7xl rounded-[1.75rem] border border-white/15 bg-black/70 p-5 backdrop-blur-2xl lg:hidden">
-            <div className="grid gap-3">
+          <div className="mobile-menu-shell mx-auto mt-2 max-w-7xl rounded-[1.5rem] border border-white/15 bg-black/70 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl lg:hidden">
+            <div className="grid grid-cols-2 gap-2">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="theme-chip rounded-[1rem] border border-white/10 bg-white/6 px-4 py-3 text-sm font-medium tracking-[0.24em] text-white uppercase"
+                  className="theme-chip rounded-[0.95rem] border border-white/10 bg-white/6 px-3 py-2.5 text-[0.68rem] font-medium tracking-[0.2em] text-white uppercase"
                 >
                   {item.label}
                 </a>
               ))}
             </div>
 
-            <div className="mt-5 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setThemeMode('dark')}
-                className={`theme-chip rounded-full px-4 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase ${
-                  !isLight ? 'theme-chip-active' : ''
-                }`}
-              >
-                Dark
-              </button>
-              <button
-                type="button"
-                onClick={() => setThemeMode('light')}
-                className={`theme-chip rounded-full px-4 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase ${
-                  isLight ? 'theme-chip-active' : ''
-                }`}
-              >
-                Light
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setStyleMenuOpen((open) => !open)}
-              className="theme-chip mt-5 inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-[0.65rem] font-bold tracking-[0.24em] text-white uppercase"
-            >
-              {styleMenuOpen ? 'Hide styles' : 'Show styles'}
-            </button>
-
-            {styleMenuOpen ? (
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => {
-                    setCurrentVariation('luxury');
-                    setMobileMenuOpen(false);
-                    setStyleMenuOpen(false);
-                  }}
-                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.22em] uppercase ${
-                    currentVariation === 'luxury' ? 'theme-chip-active' : ''
-                  }`}
-                >
-                  Luxury
-                </button>
-                <button
-                  onClick={() => {
-                    setCurrentVariation('street');
-                    setMobileMenuOpen(false);
-                    setStyleMenuOpen(false);
-                  }}
-                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.22em] uppercase ${
-                    currentVariation === 'street' ? 'theme-chip-active' : ''
-                  }`}
-                >
-                  Street
-                </button>
-                <button
-                  onClick={() => {
-                    setCurrentVariation('futuristic');
-                    setMobileMenuOpen(false);
-                    setStyleMenuOpen(false);
-                  }}
-                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.22em] uppercase ${
-                    currentVariation === 'futuristic' ? 'theme-chip-active' : ''
-                  }`}
-                >
-                  Future
-                </button>
-              </div>
-            ) : null}
           </div>
         ) : null}
       </header>
