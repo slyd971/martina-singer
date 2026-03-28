@@ -235,32 +235,8 @@ export default function Home() {
 
       <div className="relative z-10 flex min-h-screen w-full items-center justify-center">
         <div className="mx-auto w-full max-w-6xl px-8">
-          <div className="grid min-h-screen grid-cols-12 items-center gap-8">
-            <div className="col-span-3 space-y-8">
-              <motion.div
-                className="space-y-4"
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <div className="h-px w-16 bg-[#f1d3a1]" />
-                <div className="h-px w-8 bg-white" />
-                <div className="h-px w-12 bg-[#c99863]" />
-              </motion.div>
-
-              <motion.div
-                className="text-xs font-mono tracking-widest text-white uppercase"
-                initial={{ x: -30, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-              >
-                <div>VOCAL</div>
-                <div>LIVE</div>
-                <div>PRESENCE</div>
-              </motion.div>
-            </div>
-
-            <div className="col-span-6 text-center">
+          <div className="flex min-h-screen items-center justify-center">
+            <div className="max-w-3xl text-center">
               <motion.div
                 className="relative"
                 initial={{ scale: 0.8, opacity: 0 }}
@@ -291,7 +267,7 @@ export default function Home() {
               </motion.div>
 
               <motion.div
-                className="mt-8 space-y-4"
+                className="mt-8 space-y-3"
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -316,80 +292,10 @@ export default function Home() {
                   Editorial live act
                 </motion.p>
               </motion.div>
-
-              <motion.div
-                className="mt-12 flex items-center justify-center space-x-6"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 1, type: 'spring' }}
-              >
-                <div className="relative">
-                  <div className="flex h-12 w-12 items-center justify-center border-2 border-[#f1d3a1]">
-                    <motion.div
-                      className="h-4 w-4 bg-[#f1d3a1]"
-                      animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
-                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-                    />
-                  </div>
-                  <motion.div
-                    className="absolute inset-0 rounded-full border border-[#f1d3a1]/55"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-                  />
-                </div>
-                <span className="text-sm font-bold tracking-widest text-white uppercase">Live booking</span>
-              </motion.div>
-            </div>
-
-            <div className="col-span-3 space-y-8">
-              <motion.div
-                className="text-right text-xs font-mono tracking-widest text-white uppercase"
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <div>STREAMS</div>
-                <div className="text-sm text-[#f1d3a1]">24M+</div>
-                <div className="mt-4">AUDIENCE</div>
-                <div className="text-sm text-[#f1d3a1]">410K</div>
-              </motion.div>
-
-              <motion.div
-                className="flex justify-end space-x-2"
-                initial={{ x: 30, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
-              >
-                <div className="h-px w-6 bg-white/30" />
-                <div className="h-px w-4 bg-[#f1d3a1]" />
-                <div className="h-px w-8 bg-white/20" />
-              </motion.div>
             </div>
           </div>
         </div>
       </div>
-
-      <motion.div
-        className="absolute right-8 top-8 text-xs font-mono tracking-widest text-white uppercase"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        <div>PRESS</div>
-        <div>LIVE</div>
-        <div>SHOWCASE</div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-8 left-8 text-xs font-mono tracking-widest text-white uppercase"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <div>SINGER</div>
-        <div>SONGWRITER</div>
-        <div>PERFORMER</div>
-      </motion.div>
     </motion.section>
   );
 
@@ -454,7 +360,7 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="space-y-4 font-mono"
+            className="space-y-4"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -481,53 +387,8 @@ export default function Home() {
               curating visuals, live cuts, and booking assets...
             </motion.p>
           </motion.div>
-
-          <motion.div
-            className="flex items-center justify-center space-x-6"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8, type: 'spring' }}
-          >
-            <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center border border-[#f1d3a1]">
-                <motion.div
-                  className="h-2 w-2 rounded-full bg-[#f1d3a1]"
-                  animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                  transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' }}
-                />
-              </div>
-              <motion.div
-                className="absolute left-0 top-0 h-px w-full bg-[#f1d3a1]"
-                animate={{ y: [0, 48, 0] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
-              />
-            </div>
-            <span className="text-sm font-mono tracking-widest text-white uppercase">press access</span>
-          </motion.div>
         </div>
       </div>
-
-      <motion.div
-        className="absolute left-8 top-8 font-mono text-xs text-white"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        <div>STREAMS: 24M+</div>
-        <div>AUDIENCE: 410K</div>
-        <div>FORMAT: LIVE</div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-8 right-8 text-right font-mono text-xs text-white"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <div>BOOKING.STATUS</div>
-        <div>OPEN</div>
-        <div>2026</div>
-      </motion.div>
     </motion.section>
   );
 

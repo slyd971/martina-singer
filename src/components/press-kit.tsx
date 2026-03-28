@@ -220,7 +220,7 @@ export const artistData = {
   ] satisfies ArtistPressItem[],
   booking: {
     heading: 'Available for clubs, private events, showcases, and branded live performances.',
-    description: 'Sly\'D performs in formats ranging from intimate showcases to high-energy evening events, with a set designed for both strong audience connection and clean visual presentation.',
+    description: 'Flexible live formats for showcases, private events, and premium nightlife programming.',
   },
   spotifyFeature: {
     title: 'Listen on Spotify',
@@ -327,7 +327,7 @@ function SectionIntro({
 
 export function AboutSection() {
   return (
-    <section className="press-section section-about relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-about relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,246,230,0.05),rgba(33,23,18,0.42)_58%,transparent)]" />
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,rgba(226,192,148,0.16),transparent_56%)] blur-2xl" />
       <div className="grain-overlay" />
@@ -335,9 +335,9 @@ export function AboutSection() {
       <div className="warm-spotlight right-[-8rem] top-[12%]" />
       <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
       <div className="absolute right-0 top-20 h-72 w-72 rounded-full bg-[#c4844d]/12 blur-3xl" />
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch lg:gap-10">
         <motion.div
-          className="flex flex-col justify-between gap-10"
+          className="flex flex-col justify-between gap-8 lg:gap-10"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -361,24 +361,6 @@ export function AboutSection() {
             </motion.p>
           </div>
 
-          <motion.div
-            variants={stagger}
-            className="grid gap-4 sm:grid-cols-3"
-          >
-            {artistData.stats.slice(0, 3).map((stat) => (
-              <motion.div
-                key={stat.label}
-                variants={fadeUp}
-                className="border-t border-white/15 pt-4"
-              >
-                <p className="text-3xl font-black tracking-[-0.05em] text-white sm:text-4xl">
-                  {stat.value}
-                  {stat.suffix}
-                </p>
-                <p className="mt-2 text-xs uppercase tracking-[0.28em] text-white">{stat.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
         </motion.div>
 
         <motion.div
@@ -410,7 +392,7 @@ export function AboutSection() {
 
 export function MusicSection() {
   return (
-    <section className="press-section section-music relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-music relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="ambient-shift absolute inset-0 bg-[linear-gradient(135deg,rgba(53,34,24,0.92),rgba(16,12,10,0.58)),radial-gradient(circle_at_top_left,rgba(225,189,144,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(150,96,64,0.18),transparent_30%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),transparent_18%,rgba(0,0,0,0.18)_100%)]" />
       <div className="grain-overlay" />
@@ -424,7 +406,7 @@ export function MusicSection() {
         />
 
         <motion.div
-          className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:mt-14 sm:gap-5 sm:pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -436,9 +418,9 @@ export function MusicSection() {
               variants={fadeUp}
               whileHover={{ y: -10, scale: 1.01 }}
               transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="theme-panel group relative min-h-[30rem] min-w-[84vw] snap-center overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] sm:min-w-[34rem] lg:min-w-[38rem]"
+              className="theme-panel group relative min-h-[28rem] min-w-[84vw] snap-center overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] sm:min-h-[30rem] sm:min-w-[34rem] lg:min-w-[38rem]"
             >
-              <div className="absolute inset-x-6 bottom-6 z-0 overflow-hidden rounded-[1.5rem] border border-white/10 opacity-65 blur-[1px]">
+              <div className="absolute inset-x-6 bottom-6 z-0 hidden overflow-hidden rounded-[1.5rem] border border-white/10 opacity-65 blur-[1px] sm:block">
                 <iframe
                   title={`${track.title} Spotify embed`}
                   src={track.spotifyEmbedUrl}
@@ -461,7 +443,7 @@ export function MusicSection() {
                 <div className="theme-image-depth absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-[#0d0908] via-[#0d0908]/84 to-transparent" />
                 <div className="film-vignette" />
               </div>
-              <div className="relative z-10 flex h-full flex-col justify-between p-6 sm:p-8 lg:p-10">
+              <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-8 lg:p-10">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.3em] text-white">{track.format}</p>
@@ -472,7 +454,7 @@ export function MusicSection() {
                   </div>
                 </div>
 
-                <div className="theme-overlay-panel max-w-md rounded-[1.5rem] bg-black/28 p-4 backdrop-blur-sm sm:p-5">
+                <div className="theme-overlay-panel max-w-md rounded-[1.5rem] bg-black/28 p-4 backdrop-blur-sm sm:mb-0 sm:p-5">
                   <motion.button
                     type="button"
                     whileHover={{ scale: 1.06 }}
@@ -500,7 +482,7 @@ export function VideoSection() {
   const [featured, supporting] = artistData.videos;
 
   return (
-    <section className="press-section section-video relative overflow-hidden border-t border-white/12 px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
+    <section className="press-section section-video relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,14,12,0.95),rgba(8,8,8,0.35))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(243,214,174,0.16),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(179,118,79,0.14),transparent_26%)]" />
       <div className="absolute inset-y-0 right-0 w-1/3 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),transparent)]" />
@@ -583,7 +565,7 @@ export function SpotifySection() {
   const feature = artistData.spotifyFeature;
 
   return (
-    <section className="press-section section-spotify relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 lg:px-12 lg:py-20">
+    <section className="press-section section-spotify relative overflow-hidden border-t border-white/12 px-5 py-14 sm:px-8 sm:py-20 lg:px-12 lg:py-20">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,18,15,0.96),rgba(10,10,10,0.28))]" />
       <div className="ambient-shift absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,211,161,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(160,96,66,0.16),transparent_28%)]" />
       <div className="grain-overlay" />
@@ -638,7 +620,7 @@ export function SpotifySection() {
 
 export function SocialProofSection() {
   return (
-    <section className="press-section section-numbers relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-numbers relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="ambient-shift absolute inset-0 bg-[linear-gradient(180deg,rgba(71,46,30,0.84),rgba(12,10,10,0.22)),radial-gradient(circle_at_top,rgba(232,200,154,0.22),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(145,87,58,0.22),transparent_28%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.04),transparent)]" />
       <div className="grain-overlay" />
@@ -652,7 +634,7 @@ export function SocialProofSection() {
         />
 
         <motion.div
-          className="mt-16 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-10 grid gap-x-6 gap-y-8 sm:mt-14 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-4"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -681,7 +663,7 @@ export function PressSection() {
   const items = [...artistData.press, ...artistData.press];
 
   return (
-    <section className="press-section section-press relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-press relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,16,14,0.96),rgba(10,9,9,0.22))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(170,120,87,0.16),transparent_24%),radial-gradient(circle_at_right,rgba(232,198,154,0.14),transparent_26%)]" />
       <div className="grain-overlay" />
@@ -693,7 +675,7 @@ export function PressSection() {
           body="Selected media support, editorial mentions, and event partnerships."
         />
 
-        <div className="mt-14 overflow-hidden border-y border-white/10 py-5">
+        <div className="mt-10 overflow-hidden border-y border-white/10 py-4 sm:mt-14 sm:py-5">
           <div className="marquee-track flex min-w-max gap-5">
             {items.map((item, index) => (
               <article
@@ -714,13 +696,13 @@ export function PressSection() {
 
 export function LiveSection() {
   return (
-    <section className="press-section section-booking relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-booking relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="ambient-shift absolute inset-0 bg-[linear-gradient(180deg,rgba(115,82,50,0.74),rgba(22,18,15,0.28)),radial-gradient(circle_at_center,rgba(255,231,196,0.18),transparent_30%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.12),_transparent_45%)]" />
       <div className="grain-overlay" />
       <div className="film-vignette" />
       <motion.div
-        className="theme-panel relative z-10 mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,rgba(255,248,239,0.28),rgba(255,255,255,0.12))] p-8 shadow-[0_24px_90px_rgba(0,0,0,0.26)] sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:p-14"
+        className="theme-panel relative z-10 mx-auto grid max-w-7xl gap-6 overflow-hidden rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,rgba(255,248,239,0.28),rgba(255,255,255,0.12))] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.26)] sm:gap-8 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:p-14"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.25 }}
@@ -732,20 +714,20 @@ export function LiveSection() {
           <h2 className="mt-5 max-w-3xl text-4xl font-black tracking-[-0.06em] text-white sm:text-5xl lg:text-7xl">
             Booking
           </h2>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-white sm:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-white sm:mt-6 sm:text-lg">
             {artistData.booking.heading}
           </p>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-white">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-white sm:mt-4 sm:text-base sm:leading-7">
             {artistData.booking.description}
           </p>
         </div>
 
-        <div className="theme-overlay-panel relative z-10 flex flex-col justify-between gap-8 rounded-[1.5rem] border border-white/12 bg-black/18 p-6 backdrop-blur-md lg:pl-8 lg:pt-6">
-          <div className="space-y-4">
+        <div className="theme-overlay-panel relative z-10 flex flex-col justify-between gap-5 rounded-[1.5rem] border border-white/12 bg-black/18 p-4 backdrop-blur-md sm:gap-8 sm:p-6 lg:pl-8 lg:pt-6">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-xs uppercase tracking-[0.3em] text-white">Direct Booking</p>
             <a
               href={`mailto:${artistData.contact.bookingEmail}`}
-              className="block text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl"
+              className="block break-all text-xl font-black tracking-[-0.04em] text-white sm:text-3xl sm:break-normal"
             >
               {artistData.contact.bookingEmail}
             </a>
@@ -755,7 +737,7 @@ export function LiveSection() {
             href={`mailto:${artistData.contact.bookingEmail}?subject=Booking Inquiry for ${artistData.name}`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="theme-button-primary inline-flex w-fit items-center rounded-full bg-white px-7 py-3 text-sm font-bold uppercase tracking-[0.25em] text-black"
+            className="theme-button-primary inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold uppercase tracking-[0.22em] text-black sm:w-fit sm:px-7 sm:tracking-[0.25em]"
           >
             Book now
           </motion.a>
@@ -769,7 +751,7 @@ export function SocialWallSection() {
   const [featured, ...rest] = artistData.socials;
 
   return (
-    <section className="press-section section-social relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-social relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(41,30,22,0.58),rgba(11,10,10,0.16))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(177,132,95,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(233,198,154,0.12),transparent_26%)]" />
       <div className="grain-overlay" />
@@ -781,7 +763,7 @@ export function SocialWallSection() {
           body="Recent content and platform performance across Instagram and TikTok."
         />
 
-        <div className="mt-14 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-[1.1fr_0.9fr]">
           <motion.a
             href={featured.href}
             target="_blank"
@@ -852,7 +834,7 @@ export function SocialWallSection() {
 
 export function GallerySection() {
   return (
-    <section className="press-section section-gallery relative overflow-hidden border-t border-white/12 px-5 py-24 sm:px-8 lg:px-12 lg:py-32">
+    <section className="press-section section-gallery relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,14,13,0.94),rgba(10,10,10,0.2))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(233,198,154,0.16),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(155,98,66,0.14),transparent_24%)]" />
       <div className="absolute inset-y-0 left-0 w-1/4 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
@@ -881,7 +863,7 @@ export function GallerySection() {
         </div>
 
         <motion.div
-          className="mt-12 flex gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="mt-10 flex gap-4 overflow-x-auto pb-3 sm:mt-12 sm:gap-5 sm:pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -918,13 +900,13 @@ export function GallerySection() {
 
 export function ContactSection() {
   return (
-    <section className="press-section section-contact relative overflow-hidden border-t border-white/12 px-5 pb-24 pt-24 sm:px-8 lg:px-12 lg:pb-32 lg:pt-32">
+    <section className="press-section section-contact relative overflow-hidden border-t border-white/12 px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-20 lg:px-12 lg:pb-32 lg:pt-32">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(61,42,28,0.62),rgba(12,12,12,0.3))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(232,198,154,0.16),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(141,97,67,0.16),transparent_28%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.05))]" />
       <div className="grain-overlay" />
       <div className="paper-texture" />
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-6 sm:gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
