@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Sly'D - Artist Press Kit",
-  description: "Official press kit for Sly'D, singer, songwriter, and live performer.",
+  title: 'Martina | Press kit artiste premium',
+  description: 'Press kit officiel de Martina, chanteuse et artiste live.',
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="fr" className="h-full antialiased">
       <body className="min-h-full">{children}</body>
     </html>
   );
