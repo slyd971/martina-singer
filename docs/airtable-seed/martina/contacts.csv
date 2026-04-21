@@ -1,3 +1,3 @@
-clientSlug,name,email,phone,role
+slug,name,email,phone,role
 "martina","M. Bellucci Management","management@martina.presskit.fr","","Management"
 "martina","Press Office Martina","press@martina.presskit.fr","","Presse"

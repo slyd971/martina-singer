@@ -1,4 +1,4 @@
-clientSlug,sectionKey,label,value,detail,source,quote,kind,order
+slug,sectionKey,label,value,detail,source,quote,kind,order
 "martina","highlight","Streams","128K+","Écoutes cumulées sur les sorties actuellement actives.","","","","1"
 "martina","highlight","Instagram","18K","Communauté visuelle engagée autour du projet.","","","","2"
 "martina","highlight","Live","12","Dates privées, showcases et apparitions live récentes.","","","","3"

@@ -1034,6 +1034,7 @@ function WhoIsMartinaSection({ artist }: { artist: Artist }) {
 
         @media (max-width: 720px) {
           .archive {
+            --offset: 0px;
             transform: translateY(0);
           }
         }
