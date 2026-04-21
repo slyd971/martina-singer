@@ -161,9 +161,9 @@ export const martinaArtist: Artist = {
     },
   ],
   seo: {
-    title: 'Martina | Press kit — Soul House Artist',
+    title: 'Martina — Press Kit Officiel | Soul & House Artist',
     description:
-      'Press kit officiel de Martina : bio, galerie, vidéos, streaming et contact booking.',
+      'Press kit officiel de Martina, artiste soul house. Bio, galerie photos, vidéos live, liens streaming et contacts pour le booking et la presse.',
     keywords: ['Martina', 'press kit artiste', 'soul house', 'booking artiste', 'live performer'],
     ogImage: '/martina/og-image.jpg',
     ogImageWidth: 1200,
