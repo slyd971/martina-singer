@@ -1106,8 +1106,7 @@ function WhoIsMartinaSection({ artist }: { artist: Artist }) {
 
         @media (max-width: 720px) {
           .archive {
-            --offset: 0px;
-            transform: translateY(0);
+            animation-name: rise-flat;
           }
         }
 
@@ -1120,6 +1119,11 @@ function WhoIsMartinaSection({ artist }: { artist: Artist }) {
             opacity: 1;
             transform: translateY(var(--offset, 0px));
           }
+        }
+
+        @keyframes rise-flat {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
         .archive__fig {
