@@ -10,9 +10,5 @@ export const metadata: Metadata = {
 
 export default async function NbPage() {
   const artist = await resolveArtist(martinaArtist.slug);
-  return (
-    <div style={{ filter: 'grayscale(1)' }}>
-      <ArtistHomePage artist={artist} />
-    </div>
-  );
+  return <ArtistHomePage artist={artist} initialTheme="bw" />;
 }

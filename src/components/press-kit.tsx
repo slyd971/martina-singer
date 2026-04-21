@@ -313,10 +313,10 @@ function SiteHeader({ artist, prefixAnchors = false }: { artist: Artist; prefixA
   );
 }
 
-function ArtistHero({ artist }: ArtistPageProps) {
+function ArtistHero({ artist, initialTheme }: ArtistPageProps & { initialTheme?: ThemeMode }) {
   const { scrollYProgress } = useScroll();
   const [currentVariation, setCurrentVariation] = useState<Variation>('luxury');
-  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
+  const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme ?? 'dark');
   const [styleMenuOpen, setStyleMenuOpen] = useState(false);
   const y1 = useTransform(scrollYProgress, [0, 0.25], [0, -70]);
   const y2 = useTransform(scrollYProgress, [0, 0.25], [0, -35]);
@@ -1644,10 +1644,10 @@ function SiteFooter({ artist }: { artist: Artist }) {
   );
 }
 
-export function ArtistHomePage({ artist }: ArtistPageProps) {
+export function ArtistHomePage({ artist, initialTheme }: ArtistPageProps & { initialTheme?: ThemeMode }) {
   return (
     <div className="site-shell relative overflow-x-hidden bg-[#0b0908] text-white" data-site-theme="dark">
-      <ArtistHero artist={artist} />
+      <ArtistHero artist={artist} initialTheme={initialTheme} />
       <main className="page-main relative">
         <ListenHighlightSection artist={artist} />
         <AboutSection artist={artist} />
