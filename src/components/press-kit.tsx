@@ -97,6 +97,75 @@ function YouTubePoster({
   );
 }
 
+function HeroSocialBand({ artist }: { artist: Artist }) {
+  const allLinks = [
+    ...artist.socials.map((s) => ({ platform: s.platform, handle: s.handle, url: s.url })),
+    ...artist.streamingLinks.map((s) => ({ platform: s.platform, handle: s.label, url: s.url })),
+  ];
+
+  return (
+    <motion.div
+      className="absolute inset-x-0 bottom-0 z-20 border-t border-white/10 bg-black/30 backdrop-blur-sm"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 1.3, ease: 'easeOut' }}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-center gap-0 overflow-x-auto px-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:px-8">
+        {allLinks.map((link, i) => (
+          <a
+            key={link.platform}
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex flex-none items-center gap-2.5 border-r border-white/8 px-5 py-3.5 transition-colors hover:bg-white/5 last:border-r-0 sm:px-7"
+          >
+            <HeroPlatformIcon platform={link.platform} />
+            <span className="hidden text-[0.62rem] font-medium tracking-[0.28em] text-white/45 uppercase transition-colors group-hover:text-white/70 sm:block">
+              {link.handle.replace(/^@/, '')}
+            </span>
+          </a>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function HeroPlatformIcon({ platform }: { platform: string }) {
+  const cls = 'h-[18px] w-[18px] text-white/60 transition-colors group-hover:text-white/90';
+  if (platform === 'Instagram') return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cls}>
+      <rect x="4" y="4" width="16" height="16" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+  if (platform === 'TikTok') return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={cls}>
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.05a8.16 8.16 0 0 0 4.77 1.52V7.12a4.85 4.85 0 0 1-1-.43z"/>
+    </svg>
+  );
+  if (platform === 'YouTube') return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={cls}>
+      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/>
+    </svg>
+  );
+  if (platform === 'Spotify') return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={cls}>
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 14.5c2.5-1 5.5-.8 7.5.5" stroke="#0a0a0a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M7.5 11.5c3-1.2 6.5-1 9 .8" stroke="#0a0a0a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M7 8.5c3.5-1.4 7.5-1.2 10.5 1" stroke="#0a0a0a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+  if (platform === 'Apple Music') return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={cls}>
+      <path d="M18.71 5.65C17.91 4.75 16.71 4.25 15.5 4.25h-7c-1.21 0-2.41.5-3.21 1.4C4.49 6.55 4 7.75 4 9v6c0 1.25.49 2.45 1.29 3.35.8.9 2 1.4 3.21 1.4h7c1.21 0 2.41-.5 3.21-1.4.8-.9 1.29-2.1 1.29-3.35V9c0-1.25-.49-2.45-1.29-3.35zM15 12.5v2c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-1.29l-3 .75v2.04c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-4.5c0-.24.17-.44.41-.49l3.5-.88c.16-.04.33 0 .45.11.12.11.14.28.14.44v.82z"/>
+    </svg>
+  );
+  return null;
+}
+
 function ContactLogo({
   kind,
 }: {
@@ -371,6 +440,7 @@ function ArtistHero({ artist }: ArtistPageProps) {
           </div>
         </div>
       </div>
+      <HeroSocialBand artist={artist} />
     </motion.section>
   );
 
@@ -457,6 +527,7 @@ function ArtistHero({ artist }: ArtistPageProps) {
           </div>
         </div>
       </div>
+      <HeroSocialBand artist={artist} />
     </motion.section>
   );
 
@@ -520,6 +591,7 @@ function ArtistHero({ artist }: ArtistPageProps) {
           </motion.div>
         </div>
       </div>
+      <HeroSocialBand artist={artist} />
     </motion.section>
   );
 
@@ -626,22 +698,25 @@ function AboutSection({ artist }: { artist: Artist }) {
             <p className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg">{artist.longBio}</p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            {artist.highlights.map((highlight) => (
-              <div
-                key={highlight.label}
-                className="theme-overlay-panel rounded-[1.5rem] border border-white/10 bg-black/22 p-5 backdrop-blur-md"
-              >
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/52">
-                  {highlight.label}
-                </p>
-                <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-white">
-                  {highlight.value}
-                </p>
-                <p className="mt-3 text-sm leading-6 text-white/68">{highlight.detail}</p>
-              </div>
-            ))}
-          </div>
+          {/* KPIs hidden — to be re-enabled once data is confirmed */}
+          {false && (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {artist.highlights.map((highlight) => (
+                <div
+                  key={highlight.label}
+                  className="theme-overlay-panel rounded-[1.5rem] border border-white/10 bg-black/22 p-5 backdrop-blur-md"
+                >
+                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/52">
+                    {highlight.label}
+                  </p>
+                  <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-white">
+                    {highlight.value}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-white/68">{highlight.detail}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <motion.div
@@ -1456,14 +1531,14 @@ function ContactSection({ artist }: { artist: Artist }) {
         </div>
 
         <div className="border-t border-white/12">
-          <div className="grid sm:grid-cols-2">
+          <div className="grid grid-cols-2">
             {contactItems.map((item, index) => (
               <a
                 key={item.label}
                 href={item.href}
                 target={item.href.startsWith('mailto:') ? undefined : '_blank'}
                 rel={item.href.startsWith('mailto:') ? undefined : 'noreferrer'}
-                className="group grid min-h-[10rem] grid-cols-1 border-b border-white/10 px-0 py-6 transition-colors hover:bg-white/[0.02] sm:px-6 lg:min-h-[11rem] lg:py-7"
+                className="group grid min-h-[8rem] grid-cols-1 border-b border-white/10 px-3 py-5 transition-colors hover:bg-white/[0.02] sm:px-6 sm:min-h-[10rem] lg:min-h-[11rem] lg:py-7"
                 style={{
                   borderRight:
                     index % 2 === 0 && index !== contactItems.length - 1
@@ -1471,14 +1546,14 @@ function ContactSection({ artist }: { artist: Artist }) {
                       : undefined,
                 }}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4">
                   <ContactLogo kind={item.kind} />
-                  <p className="text-[0.72rem] uppercase tracking-[0.32em] text-white/72">
+                  <p className="text-[0.62rem] uppercase tracking-[0.28em] text-white/72 sm:text-[0.72rem] sm:tracking-[0.32em]">
                     {item.label}
                   </p>
                 </div>
                 <div className="min-w-0 pl-0 sm:pl-8">
-                  <p className="mt-4 max-w-[20rem] text-lg leading-7 text-white transition-colors group-hover:text-[#f1d3a1] sm:text-xl">
+                  <p className="mt-3 break-all text-sm leading-6 text-white transition-colors group-hover:text-[#f1d3a1] sm:text-lg sm:leading-7 lg:text-xl">
                     {item.value}
                   </p>
                 </div>
