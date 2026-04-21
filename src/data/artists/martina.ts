@@ -168,7 +168,7 @@ export const martinaArtist: Artist = {
     ogImage: '/martina/og-image.jpg',
     ogImageWidth: 1200,
     ogImageHeight: 630,
-    ogImageAlt: 'Martina — Press kit artiste',
+    ogImageAlt: 'Martina — Presskit — Soul House Artist',
     pages: {
       gallery: {
         title: 'Martina | Galerie photos',
