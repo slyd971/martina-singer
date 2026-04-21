@@ -754,7 +754,7 @@ function WhoIsMartinaSection({ artist }: { artist: Artist }) {
       src: '/martina/scene-1.jpeg',
       title: 'ISHA',
       date: '08 mars 2025',
-      place: "94 rue d'Alésia, Paris 14e",
+      place: "194 rue d'Alésia, Paris 14e",
       kind: 'Exposition · Concert · DJ set',
       alt: 'Flyer ISHA by Martina',
       featured: true,
