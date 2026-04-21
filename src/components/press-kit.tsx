@@ -117,12 +117,9 @@ function HeroSocialBand({ artist }: { artist: Artist }) {
             href={link.url}
             target="_blank"
             rel="noreferrer"
-            className="group flex flex-none items-center gap-2.5 border-r border-white/8 px-5 py-3.5 transition-colors hover:bg-white/5 last:border-r-0 sm:px-7"
+            className="group flex flex-none items-center border-r border-white/8 px-5 py-4 transition-colors hover:bg-white/5 last:border-r-0 sm:px-8"
           >
             <HeroPlatformIcon platform={link.platform} />
-            <span className="hidden text-[0.62rem] font-medium tracking-[0.28em] text-white/45 uppercase transition-colors group-hover:text-white/70 sm:block">
-              {link.handle.replace(/^@/, '')}
-            </span>
           </a>
         ))}
       </div>
@@ -131,7 +128,7 @@ function HeroSocialBand({ artist }: { artist: Artist }) {
 }
 
 function HeroPlatformIcon({ platform }: { platform: string }) {
-  const cls = 'h-[18px] w-[18px] text-white/60 transition-colors group-hover:text-white/90';
+  const cls = 'h-[22px] w-[22px] text-white/60 transition-colors group-hover:text-white/90';
   if (platform === 'Instagram') return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className={cls}>
       <rect x="4" y="4" width="16" height="16" rx="5" />
@@ -1566,6 +1563,51 @@ function ContactSection({ artist }: { artist: Artist }) {
   );
 }
 
+function FooterPlatformIcon({ platform }: { platform: string }) {
+  const sz = 'h-5 w-5';
+  if (platform === 'Instagram') return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="url(#ig-footer)" strokeWidth="1.7" className={sz}>
+      <defs>
+        <linearGradient id="ig-footer" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#f09433" />
+          <stop offset="25%" stopColor="#e6683c" />
+          <stop offset="50%" stopColor="#dc2743" />
+          <stop offset="75%" stopColor="#cc2366" />
+          <stop offset="100%" stopColor="#bc1888" />
+        </linearGradient>
+      </defs>
+      <rect x="4" y="4" width="16" height="16" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="1" fill="url(#ig-footer)" stroke="none" />
+    </svg>
+  );
+  if (platform === 'TikTok') return (
+    <svg viewBox="0 0 24 24" fill="#000000" className={sz}>
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.05a8.16 8.16 0 0 0 4.77 1.52V7.12a4.85 4.85 0 0 1-1-.43z"/>
+    </svg>
+  );
+  if (platform === 'YouTube') return (
+    <svg viewBox="0 0 24 24" fill="#FF0000" className={sz}>
+      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#ffffff"/>
+    </svg>
+  );
+  if (platform === 'Spotify') return (
+    <svg viewBox="0 0 24 24" fill="#1DB954" className={sz}>
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 14.5c2.5-1 5.5-.8 7.5.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M7.5 11.5c3-1.2 6.5-1 9 .8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <path d="M7 8.5c3.5-1.4 7.5-1.2 10.5 1" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+  if (platform === 'Apple Music') return (
+    <svg viewBox="0 0 24 24" fill="#FC3C44" className={sz}>
+      <path d="M18.71 5.65C17.91 4.75 16.71 4.25 15.5 4.25h-7c-1.21 0-2.41.5-3.21 1.4C4.49 6.55 4 7.75 4 9v6c0 1.25.49 2.45 1.29 3.35.8.9 2 1.4 3.21 1.4h7c1.21 0 2.41-.5 3.21-1.4.8-.9 1.29-2.1 1.29-3.35V9c0-1.25-.49-2.45-1.29-3.35zM15 12.5v2c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-1.29l-3 .75v2.04c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-4.5c0-.24.17-.44.41-.49l3.5-.88c.16-.04.33 0 .45.11.12.11.14.28.14.44v.82z"/>
+    </svg>
+  );
+  return null;
+}
+
 function SiteFooter({ artist }: { artist: Artist }) {
   const year = new Date().getFullYear();
   return (
@@ -1579,24 +1621,19 @@ function SiteFooter({ artist }: { artist: Artist }) {
             © {year} · Tous droits réservés
           </p>
         </div>
-        <nav className="flex items-center gap-6">
-          {artist.socials.map((social) => (
+        <nav className="flex items-center gap-5">
+          {[...artist.socials, ...artist.streamingLinks.map((s) => ({ platform: s.platform, url: s.url }))].map((item) => (
             <a
-              key={social.platform}
-              href={social.url}
+              key={item.platform}
+              href={item.url}
               target="_blank"
               rel="noreferrer"
-              className="text-[0.68rem] uppercase tracking-[0.28em] text-black/38 transition-colors hover:text-[#f1d3a1]"
+              className="group transition-opacity hover:opacity-80"
+              aria-label={item.platform}
             >
-              {social.platform}
+              <FooterPlatformIcon platform={item.platform} />
             </a>
           ))}
-          <a
-            href={`mailto:${artist.bookingEmail}`}
-            className="text-[0.68rem] uppercase tracking-[0.28em] text-black/38 transition-colors hover:text-[#f1d3a1]"
-          >
-            Booking
-          </a>
         </nav>
       </div>
     </footer>
