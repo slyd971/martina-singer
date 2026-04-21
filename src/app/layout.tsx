@@ -1,9 +1,22 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { martinaArtist } from '@/data/artists/martina';
+
+const hostname = martinaArtist.domain ?? martinaArtist.vercelSubdomain;
 
 export const metadata: Metadata = {
-  title: 'Martina | Press kit artiste premium',
-  description: 'Press kit officiel de Martina, chanteuse et artiste live.',
+  metadataBase: new URL(`https://${hostname}`),
+  title: {
+    default: martinaArtist.seo.title,
+    template: '%s',
+  },
+  description: martinaArtist.seo.description,
+};
+
+export const viewport: Viewport = {
+  themeColor: '#080808',
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

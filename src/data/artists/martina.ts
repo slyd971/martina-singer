@@ -169,5 +169,17 @@ export const martinaArtist: Artist = {
     ogImageWidth: 1200,
     ogImageHeight: 630,
     ogImageAlt: 'Martina — Press kit artiste premium',
+    pages: {
+      gallery: {
+        title: 'Martina | Galerie photos',
+        description:
+          'Galerie officielle de Martina : photos de scène, portraits éditoriaux et visuels premium disponibles pour la presse.',
+      },
+      listen: {
+        title: 'Martina | Écouter — Spotify & Apple Music',
+        description:
+          'Retrouvez la discographie de Martina sur Spotify, Apple Music et toutes les plateformes de streaming.',
+      },
+    },
   },
 };

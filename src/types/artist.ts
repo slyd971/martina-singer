@@ -56,6 +56,10 @@ export type ArtistSeo = {
   ogImageWidth?: number;
   ogImageHeight?: number;
   ogImageAlt?: string;
+  pages?: {
+    gallery?: { title: string; description: string };
+    listen?: { title: string; description: string };
+  };
 };
 
 export type ArtistDomainConfig = {
