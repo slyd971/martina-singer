@@ -326,6 +326,7 @@ function ArtistHero({ artist, initialTheme }: ArtistPageProps & { initialTheme?:
   const futuristicImage = artist.gallery[2]?.src ?? artist.heroImage.src;
 
   useEffect(() => {
+    if (initialTheme) return; // theme forced by route, ignore localStorage
     const savedTheme = window.localStorage.getItem('site-theme');
 
     if (savedTheme === 'bw' || savedTheme === 'dark') {
@@ -335,7 +336,7 @@ function ArtistHero({ artist, initialTheme }: ArtistPageProps & { initialTheme?:
 
       return () => window.cancelAnimationFrame(frame);
     }
-  }, []);
+  }, [initialTheme]);
 
   useEffect(() => {
     document.documentElement.dataset.siteTheme = themeMode;

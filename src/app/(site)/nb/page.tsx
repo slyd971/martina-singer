@@ -10,5 +10,15 @@ export const metadata: Metadata = {
 
 export default async function NbPage() {
   const artist = await resolveArtist(martinaArtist.slug);
-  return <ArtistHomePage artist={artist} initialTheme="bw" />;
+  return (
+    <>
+      {/* Set bw theme on <html> before paint to avoid flash */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.dataset.siteTheme = 'bw';`,
+        }}
+      />
+      <ArtistHomePage artist={artist} initialTheme="bw" />
+    </>
+  );
 }
