@@ -142,19 +142,19 @@ export const martinaArtist: Artist = {
   ],
   videos: [
     {
-      title: 'Live session 01',
+      title: 'Nouvelle Robe',
       note: 'Performance live de Martina, entre présence scénique et intensité vocale.',
       embedId: 'DlqpLlqjkyM',
       cover: '/martina/gallery-3.jpeg',
     },
     {
-      title: 'Live session 02',
+      title: 'Pas Si Facile',
       note: "Une autre facette du projet, portée par la voix, l'émotion et le groove.",
       embedId: 'rDJ-cVKNJxA',
       cover: '/martina/gallery-4.jpeg',
     },
     {
-      title: 'Live session 03',
+      title: "How You Doin'",
       note: "Une vidéo qui prolonge l'univers de Martina dans une esthétique plus frontale.",
       embedId: 'h8dalM6XkjE',
       cover: '/martina/gallery-5.jpeg',
