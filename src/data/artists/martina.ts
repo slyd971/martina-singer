@@ -165,6 +165,9 @@ export const martinaArtist: Artist = {
     description:
       'Press kit officiel de Martina : bio, galerie, vidéos, streaming et contact booking dans un univers premium.',
     keywords: ['Martina', 'press kit artiste', 'soul house', 'booking artiste', 'live performer'],
-    ogImage: '/martina/hero-martina.jpeg',
+    ogImage: '/martina/og-image.jpg',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+    ogImageAlt: 'Martina — Press kit artiste premium',
   },
 };

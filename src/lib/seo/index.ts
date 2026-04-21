@@ -29,7 +29,10 @@ export function buildArtistMetadata(artist: Artist, path = '/'): Metadata {
       images: [
         {
           url: getCanonicalUrl(artist, artist.seo.ogImage),
-          alt: artist.stageName,
+          width: artist.seo.ogImageWidth ?? 1200,
+          height: artist.seo.ogImageHeight ?? 630,
+          alt: artist.seo.ogImageAlt ?? artist.stageName,
+          type: 'image/jpeg',
         },
       ],
     },
@@ -37,7 +40,14 @@ export function buildArtistMetadata(artist: Artist, path = '/'): Metadata {
       card: 'summary_large_image',
       title,
       description: artist.seo.description,
-      images: [getCanonicalUrl(artist, artist.seo.ogImage)],
+      images: [
+        {
+          url: getCanonicalUrl(artist, artist.seo.ogImage),
+          width: artist.seo.ogImageWidth ?? 1200,
+          height: artist.seo.ogImageHeight ?? 630,
+          alt: artist.seo.ogImageAlt ?? artist.stageName,
+        },
+      ],
     },
   };
 }

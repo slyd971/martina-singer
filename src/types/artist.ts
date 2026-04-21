@@ -53,6 +53,9 @@ export type ArtistSeo = {
   description: string;
   keywords: string[];
   ogImage: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  ogImageAlt?: string;
 };
 
 export type ArtistDomainConfig = {
