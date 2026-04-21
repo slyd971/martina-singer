@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Artist, ArtistSocialLink, ArtistStreamingLink } from '@/types/artist';
 
 type Variation = 'luxury' | 'street' | 'futuristic';
-type ThemeMode = 'dark' | 'light';
+type ThemeMode = 'dark' | 'bw';
 
 type ArtistPageProps = {
   artist: Artist;
@@ -26,8 +26,8 @@ function getSocialUrl(artist: Artist, platform: ArtistSocialLink['platform']) {
 function buildNavItems() {
   return [
     { label: 'Listen', href: '/listen' },
-    { label: 'A propos', href: '#about' },
-    { label: 'Videos', href: '#video' },
+    { label: 'À propos', href: '#about' },
+    { label: 'Vidéos', href: '#video' },
     { label: 'Galerie', href: '#gallery' },
     { label: 'Contact', href: '#contact' },
   ];
@@ -52,11 +52,11 @@ function SectionIntro({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.7, ease: smoothEase }}
     >
-      <p className="mb-4 text-[0.72rem] uppercase tracking-[0.45em] text-white">{eyebrow}</p>
-      <h2 className="text-4xl font-black tracking-[-0.05em] text-white sm:text-5xl lg:text-7xl">
+      <p className="mb-4 text-[0.72rem] uppercase tracking-[0.45em] text-white/55">{eyebrow}</p>
+      <h2 className="text-4xl font-black tracking-[-0.06em] text-white sm:text-5xl lg:text-7xl">
         {title}
       </h2>
-      <p className="mt-5 text-base leading-7 text-white sm:text-lg">{body}</p>
+      <p className="mt-5 text-base leading-7 text-white/75 sm:text-lg">{body}</p>
     </motion.div>
   );
 }
@@ -156,26 +156,115 @@ function ContactLogo({
   );
 }
 
+function SiteHeader({ artist, prefixAnchors = false }: { artist: Artist; prefixAnchors?: boolean }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navItems = useMemo(() => buildNavItems(), []);
+
+  const resolveHref = (href: string) =>
+    href.startsWith('#') && prefixAnchors ? `/${href}` : href;
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const close = () => setMobileMenuOpen(false);
+    window.addEventListener('scroll', close, { passive: true });
+    return () => window.removeEventListener('scroll', close);
+  }, [mobileMenuOpen]);
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-8 sm:pt-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-0 py-0 sm:px-6 lg:site-header-shell lg:rounded-full lg:border lg:border-white/15 lg:bg-black/35 lg:px-4 lg:py-3 lg:backdrop-blur-xl">
+        <Link
+          href="/"
+          className="hidden text-sm font-black tracking-[0.35em] text-white uppercase lg:inline-flex"
+        >
+          {artist.stageName}
+        </Link>
+        <nav className="hidden flex-1 items-center justify-end gap-6 lg:flex">
+          {navItems.map((item) => {
+            const href = resolveHref(item.href);
+            return href.startsWith('#') ? (
+              <a
+                key={item.href}
+                href={href}
+                className="nav-link text-xs font-medium tracking-[0.28em] text-white uppercase transition-colors hover:text-[#f1d3a1]"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link
+                key={item.href}
+                href={href}
+                className="nav-link text-xs font-medium tracking-[0.28em] text-white uppercase transition-colors hover:text-[#f1d3a1]"
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          className="ml-auto flex h-10 w-10 items-center justify-center lg:hidden"
+          aria-label="Toggle navigation"
+        >
+          <span className="space-y-1.5">
+            <span className="block h-px w-4 bg-white/90 transition-transform" />
+            <span className="block h-px w-4 bg-white/90 transition-transform" />
+            <span className="block h-px w-4 bg-white/90 transition-transform" />
+          </span>
+        </button>
+      </div>
+
+      {mobileMenuOpen && (
+        <div className="mobile-menu-shell mx-auto mt-2 max-w-7xl rounded-[1.5rem] border border-white/15 bg-black/70 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl lg:hidden">
+          <div className="grid grid-cols-2 gap-2">
+            {navItems.map((item) => {
+              const href = resolveHref(item.href);
+              return href.startsWith('#') ? (
+                <a
+                  key={item.href}
+                  href={href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="theme-chip rounded-[0.95rem] border border-white/10 bg-white/6 px-3 py-2.5 text-[0.68rem] font-medium tracking-[0.2em] text-white uppercase"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="theme-chip rounded-[0.95rem] border border-white/10 bg-white/6 px-3 py-2.5 text-[0.68rem] font-medium tracking-[0.2em] text-white uppercase"
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
 function ArtistHero({ artist }: ArtistPageProps) {
   const { scrollYProgress } = useScroll();
   const [currentVariation, setCurrentVariation] = useState<Variation>('luxury');
   const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [styleMenuOpen, setStyleMenuOpen] = useState(false);
-  const navItems = useMemo(() => buildNavItems(), []);
-  const y1 = useTransform(scrollYProgress, [0, 0.14], [0, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 0.14], [0, -25]);
-  const opacity = useTransform(scrollYProgress, [0, 0.14], [1, 0.82]);
-  const isLight = themeMode === 'light';
+  const y1 = useTransform(scrollYProgress, [0, 0.25], [0, -70]);
+  const y2 = useTransform(scrollYProgress, [0, 0.25], [0, -35]);
+  const opacity = useTransform(scrollYProgress, [0, 0.25], [1, 0.76]);
+  const isBW = themeMode === 'bw';
   const streetImage = artist.gallery[1]?.src ?? artist.heroImage.src;
   const futuristicImage = artist.gallery[2]?.src ?? artist.heroImage.src;
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem('site-theme');
 
-    if (savedTheme === 'light' || savedTheme === 'dark') {
+    if (savedTheme === 'bw' || savedTheme === 'dark') {
       const frame = window.requestAnimationFrame(() => {
-        setThemeMode(savedTheme);
+        setThemeMode(savedTheme as ThemeMode);
       });
 
       return () => window.cancelAnimationFrame(frame);
@@ -187,21 +276,6 @@ function ArtistHero({ artist }: ArtistPageProps) {
     window.localStorage.setItem('site-theme', themeMode);
   }, [themeMode]);
 
-  useEffect(() => {
-    if (!mobileMenuOpen) {
-      return;
-    }
-
-    const closeOnScroll = () => {
-      setMobileMenuOpen(false);
-    };
-
-    window.addEventListener('scroll', closeOnScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', closeOnScroll);
-    };
-  }, [mobileMenuOpen]);
 
   const renderLuxuryMinimal = () => (
     <motion.section
@@ -213,6 +287,7 @@ function ArtistHero({ artist }: ArtistPageProps) {
         alt={artist.heroImage.alt}
         fill
         priority
+        quality={90}
         className="object-cover object-center opacity-90"
         sizes="100vw"
       />
@@ -231,33 +306,33 @@ function ArtistHero({ artist }: ArtistPageProps) {
               className="space-y-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 3, ease: 'easeOut' }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
             >
               <div className="relative max-w-5xl">
                 <motion.p
-                  className="mb-4 text-[0.72rem] font-medium tracking-[0.5em] text-white uppercase"
-                  initial={{ y: 24, opacity: 0 }}
+                  className="mb-4 text-[0.72rem] font-medium tracking-[0.5em] text-white/60 uppercase"
+                  initial={{ y: 18, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
+                  transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
                 >
                   Press kit
                 </motion.p>
                 <motion.h1
                   className="relative z-10 text-6xl leading-[0.92] font-black tracking-[-0.08em] text-white drop-shadow-[0_12px_40px_rgba(0,0,0,0.45)] sm:text-8xl md:text-[9rem] lg:text-[12rem]"
                   style={{ y: y1 }}
-                  initial={{ x: -100, opacity: 0 }}
+                  initial={{ x: -60, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 2, delay: 0.3, ease: 'easeOut' }}
+                  transition={{ duration: 1, delay: 0.15, ease: smoothEase }}
                 >
                   {artist.stageName}
                 </motion.h1>
               </div>
 
               <motion.div
-                className="h-px w-28 bg-white"
+                className="h-px w-28 bg-white/60"
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={{ scaleX: 1, opacity: 1 }}
-                transition={{ duration: 1.2, delay: 0.9, ease: 'easeOut' }}
+                transition={{ duration: 0.8, delay: 0.55, ease: 'easeOut' }}
                 style={{ originX: 0 }}
               />
 
@@ -266,27 +341,27 @@ function ArtistHero({ artist }: ArtistPageProps) {
                 style={{ y: y2 }}
               >
                 <motion.p
-                  className="max-w-xl text-base leading-relaxed font-light text-white md:text-xl lg:text-2xl"
-                  initial={{ y: 30, opacity: 0 }}
+                  className="max-w-xl text-base leading-relaxed font-light text-white/82 md:text-xl lg:text-2xl"
+                  initial={{ y: 22, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 1.5, delay: 1.5, ease: 'easeOut' }}
+                  transition={{ duration: 0.8, delay: 0.75, ease: smoothEase }}
                 >
                   {artist.tagline}
                 </motion.p>
                 <div className="hero-info-panel theme-panel space-y-2 rounded-[1.25rem] bg-black/24 p-4 backdrop-blur-sm md:text-right">
                   <motion.p
-                    className="text-sm font-medium tracking-[0.35em] text-white uppercase md:text-base"
-                    initial={{ y: 20, opacity: 0 }}
+                    className="text-sm font-medium tracking-[0.35em] text-white/70 uppercase md:text-base"
+                    initial={{ y: 14, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, delay: 2, ease: 'easeOut' }}
+                    transition={{ duration: 0.7, delay: 1.0, ease: smoothEase }}
                   >
-                    {artist.stageName}
+                    {artist.city} · {artist.country}
                   </motion.p>
                   <motion.p
-                    className="text-sm tracking-[0.3em] text-white uppercase"
-                    initial={{ y: 20, opacity: 0 }}
+                    className="text-sm tracking-[0.3em] text-white/55 uppercase"
+                    initial={{ y: 14, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, delay: 2.15, ease: 'easeOut' }}
+                    transition={{ duration: 0.7, delay: 1.1, ease: smoothEase }}
                   >
                     {artist.category} • {artist.genre}
                   </motion.p>
@@ -462,138 +537,70 @@ function ArtistHero({ artist }: ArtistPageProps) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-8 sm:pt-6">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-0 py-0 sm:px-6 lg:site-header-shell lg:rounded-full lg:border lg:border-white/15 lg:bg-black/35 lg:px-4 lg:py-3 lg:backdrop-blur-xl">
-          <a
-            href="#top"
-            className="hidden text-sm font-black tracking-[0.35em] text-white uppercase lg:inline-flex"
-          >
-            {artist.stageName}
-          </a>
-          <nav className="hidden flex-1 items-center justify-end gap-6 lg:flex">
-            {navItems.map((item) =>
-              item.href.startsWith('#') ? (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="nav-link text-xs font-medium tracking-[0.28em] text-white uppercase transition-colors hover:text-[#f1d3a1]"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="nav-link text-xs font-medium tracking-[0.28em] text-white uppercase transition-colors hover:text-[#f1d3a1]"
-                >
-                  {item.label}
-                </Link>
-              ),
-            )}
-          </nav>
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="ml-auto flex h-10 w-10 items-center justify-center lg:hidden"
-            aria-label="Toggle navigation"
-          >
-            <span className="space-y-1.5">
-              <span className="block h-px w-4 bg-white/90 transition-transform" />
-              <span className="block h-px w-4 bg-white/90 transition-transform" />
-              <span className="block h-px w-4 bg-white/90 transition-transform" />
-            </span>
-          </button>
-        </div>
-
-        {mobileMenuOpen ? (
-          <div className="mobile-menu-shell mx-auto mt-2 max-w-7xl rounded-[1.5rem] border border-white/15 bg-black/70 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl lg:hidden">
-            <div className="grid grid-cols-2 gap-2">
-              {navItems.map((item) =>
-                item.href.startsWith('#') ? (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="theme-chip rounded-[0.95rem] border border-white/10 bg-white/6 px-3 py-2.5 text-[0.68rem] font-medium tracking-[0.2em] text-white uppercase"
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="theme-chip rounded-[0.95rem] border border-white/10 bg-white/6 px-3 py-2.5 text-[0.68rem] font-medium tracking-[0.2em] text-white uppercase"
-                  >
-                    {item.label}
-                  </Link>
-                ),
-              )}
-            </div>
-          </div>
-        ) : null}
-      </header>
+      <SiteHeader artist={artist} />
 
       {renderCurrentVariation()}
 
-      <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-8">
-        {styleMenuOpen ? (
-          <div className="style-panel mb-3 rounded-[1.5rem] border border-white/15 bg-black/72 p-3 backdrop-blur-2xl">
-            <div className="mb-2 flex items-center gap-2">
-              <button
-                onClick={() => setThemeMode('dark')}
-                className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
-                  !isLight ? 'theme-chip-active' : ''
-                }`}
-              >
-                Nuit
-              </button>
-              <button
-                onClick={() => setThemeMode('light')}
-                className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
-                  isLight ? 'theme-chip-active' : ''
-                }`}
-              >
-                Jour
-              </button>
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-8">
+          {styleMenuOpen ? (
+            <div className="style-panel mb-3 rounded-[1.5rem] border border-white/15 bg-black/72 p-3 backdrop-blur-2xl">
+              <div className="mb-2 flex items-center gap-2">
+                <button
+                  onClick={() => setThemeMode('dark')}
+                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
+                    !isBW ? 'theme-chip-active' : ''
+                  }`}
+                >
+                  Nuit
+                </button>
+                <button
+                  onClick={() => setThemeMode('bw')}
+                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
+                    isBW ? 'theme-chip-active' : ''
+                  }`}
+                >
+                  N&amp;B
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentVariation('luxury')}
+                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
+                    currentVariation === 'luxury' ? 'theme-chip-active' : ''
+                  }`}
+                >
+                  Luxe
+                </button>
+                <button
+                  onClick={() => setCurrentVariation('street')}
+                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
+                    currentVariation === 'street' ? 'theme-chip-active' : ''
+                  }`}
+                >
+                  Scène
+                </button>
+                <button
+                  onClick={() => setCurrentVariation('futuristic')}
+                  className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
+                    currentVariation === 'futuristic' ? 'theme-chip-active' : ''
+                  }`}
+                >
+                  Futur
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setCurrentVariation('luxury')}
-                className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
-                  currentVariation === 'luxury' ? 'theme-chip-active' : ''
-                }`}
-              >
-                Luxe
-              </button>
-              <button
-                onClick={() => setCurrentVariation('street')}
-                className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
-                  currentVariation === 'street' ? 'theme-chip-active' : ''
-                }`}
-              >
-                Scene
-              </button>
-              <button
-                onClick={() => setCurrentVariation('futuristic')}
-                className={`theme-chip rounded-full px-3 py-2 text-[0.65rem] font-bold tracking-[0.24em] uppercase transition-colors ${
-                  currentVariation === 'futuristic' ? 'theme-chip-active' : ''
-                }`}
-              >
-                Futur
-              </button>
-            </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        <button
-          type="button"
-          onClick={() => setStyleMenuOpen((open) => !open)}
-          className="style-toggle rounded-full border border-white/15 bg-black/72 px-4 py-3 text-[0.65rem] font-bold tracking-[0.24em] text-white uppercase backdrop-blur-2xl transition-colors hover:bg-black/84"
-        >
-          Style
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => setStyleMenuOpen((open) => !open)}
+            className="style-toggle rounded-full border border-white/15 bg-black/72 px-4 py-3 text-[0.65rem] font-bold tracking-[0.24em] text-white uppercase backdrop-blur-2xl transition-colors hover:bg-black/84"
+          >
+            Style
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -611,12 +618,12 @@ function AboutSection({ artist }: { artist: Artist }) {
       <div className="warm-spotlight right-[-8rem] top-[12%]" />
       <div className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch lg:gap-10">
         <div className="flex flex-col justify-between gap-8 lg:gap-10">
-          <div className="space-y-6">
-            <p className="text-[0.72rem] uppercase tracking-[0.5em] text-white">L&apos;artiste</p>
-            <h2 className="max-w-xl text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              A propos de {artist.stageName}
+          <div>
+            <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">L&apos;artiste</p>
+            <h2 className="mt-4 max-w-xl text-4xl font-black tracking-[-0.06em] text-white sm:text-5xl lg:text-7xl">
+              À propos de {artist.stageName}
             </h2>
-            <p className="max-w-xl text-base leading-8 text-white sm:text-lg">{artist.longBio}</p>
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg">{artist.longBio}</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
@@ -625,13 +632,13 @@ function AboutSection({ artist }: { artist: Artist }) {
                 key={highlight.label}
                 className="theme-overlay-panel rounded-[1.5rem] border border-white/10 bg-black/22 p-5 backdrop-blur-md"
               >
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white">
+                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/52">
                   {highlight.label}
                 </p>
                 <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-white">
                   {highlight.value}
                 </p>
-                <p className="mt-3 text-sm leading-6 text-white">{highlight.detail}</p>
+                <p className="mt-3 text-sm leading-6 text-white/68">{highlight.detail}</p>
               </div>
             ))}
           </div>
@@ -653,13 +660,515 @@ function AboutSection({ artist }: { artist: Artist }) {
           />
           <div className="theme-image-overlay absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-            <p className="text-sm uppercase tracking-[0.28em] text-white">
+            <p className="text-sm uppercase tracking-[0.28em] text-white/60">
               {artist.category} • {artist.genre}
             </p>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white">{artist.shortBio}</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/75">{artist.shortBio}</p>
           </div>
         </motion.div>
       </div>
+    </section>
+  );
+}
+
+function WhoIsMartinaSection({ artist }: { artist: Artist }) {
+  if (artist.slug !== 'martina') {
+    return null;
+  }
+
+  const archives = [
+    {
+      n: 'N°01',
+      src: '/martina/scene-1.jpeg',
+      title: 'ISHA',
+      date: '08 mars 2025',
+      place: "94 rue d'Alésia, Paris 14e",
+      kind: 'Exposition · Concert · DJ set',
+      alt: 'Flyer ISHA by Martina',
+      featured: true,
+      offset: 0,
+    },
+    {
+      n: 'N°02',
+      src: '/martina/scene-2.jpeg',
+      title: 'La Scène Émergente Festival',
+      date: '19–20 avril 2025',
+      place: 'Ground Control, Paris 12e',
+      kind: 'Festival',
+      alt: 'Flyer Ground Control',
+      offset: 48,
+    },
+    {
+      n: 'N°03',
+      src: '/martina/scene-4.jpeg',
+      title: 'Noctambule — Release Party',
+      date: '03 novembre 2025',
+      place: 'Péniche Antipode, Paris 19e',
+      kind: 'Release party',
+      alt: 'Flyer Noctambule Release Party',
+      offset: 24,
+    },
+  ];
+
+  return (
+    <section className="identity" aria-labelledby="identity-title">
+      <div className="identity__grain" aria-hidden="true" />
+
+      <div className="identity__inner">
+        <header className="identity__eyebrow">
+          <span className="identity__eyebrow-label">Identité</span>
+        </header>
+
+        <div className="identity__grid">
+          <div className="identity__text">
+            <h2 id="identity-title" className="identity__title">
+              Qui est
+              <br />
+              <em>Martina</em>
+              <span className="identity__title-mark">?</span>
+            </h2>
+
+            <div className="identity__paragraphs">
+              <p className="identity__lede">
+                Originaire du <strong>19ᵉ arrondissement de Paris</strong>, Martina est une artiste
+                dont la discipline s&apos;est construite très tôt sur scène.
+              </p>
+
+              <p>
+                Formée par la danse et le théâtre dès l&apos;âge de 11 ans, elle développe une
+                présence naturelle, une vraie conscience du corps et une approche performative qui
+                irriguent aujourd&apos;hui tout son projet.
+              </p>
+
+              <div className="identity__rule" aria-hidden="true">
+                <span>Vision</span>
+              </div>
+
+              <p>
+                Après un premier cycle indépendant amorcé avec <em>« Pas si facile »</em>,
+                plusieurs sorties et l&apos;EP exploratoire <em>« EGO »</em> en 2024, Martina affirme
+                aujourd&apos;hui une identité plus profonde et exigeante.
+              </p>
+
+              <p>
+                En renouant avec les <strong>racines afro-américaines de la house music</strong>,
+                elle trouve enfin le langage de liberté, de spiritualité et de scène qu&apos;elle
+                voulait transmettre.
+              </p>
+            </div>
+
+            <dl className="identity__facts">
+              <div>
+                <dt>Origine</dt>
+                <dd>Paris 19ᵉ</dd>
+              </div>
+              <div>
+                <dt>Formation</dt>
+                <dd>Danse & théâtre, dès 11 ans</dd>
+              </div>
+              <div>
+                <dt>Dernier EP</dt>
+                <dd>EGO · 2024</dd>
+              </div>
+              <div>
+                <dt>Univers</dt>
+                <dd>House · Performance · Scène</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="identity__archives">
+            <div className="identity__archives-head">
+              <span className="identity__archives-label">Scènes</span>
+            </div>
+
+            <ul className="identity__archive-list">
+              {archives.map((item, i) => (
+                <li
+                  key={item.n}
+                  className={`archive ${item.featured ? 'archive--featured' : ''}`}
+                  style={{
+                    ['--i' as string]: i,
+                    ['--offset' as string]: `${item.offset}px`,
+                  }}
+                >
+                  <figure className="archive__fig">
+                    <div className="archive__frame">
+                      <Image
+                        src={item.src}
+                        alt={item.alt}
+                        fill
+                        sizes="(max-width: 900px) 90vw, 40vw"
+                        className="archive__img"
+                      />
+                      {item.featured ? <span className="archive__badge">Pièce maîtresse</span> : null}
+                    </div>
+
+                    <figcaption className="archive__caption">
+                      <div className="archive__caption-top">
+                        <span className="archive__n">{item.n}</span>
+                        <span className="archive__kind">{item.kind}</span>
+                      </div>
+                      <h3 className="archive__title">{item.title}</h3>
+                      <div className="archive__meta">
+                        <span>{item.date}</span>
+                        <span className="archive__sep" aria-hidden="true">
+                          ·
+                        </span>
+                        <span>{item.place}</span>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .identity {
+          position: relative;
+          background: #0b0b0d;
+          color: #f6f1e9;
+          padding: clamp(5rem, 9vw, 9rem) 0 clamp(5rem, 8vw, 8rem);
+          overflow: hidden;
+          font-family: var(--font-sans);
+        }
+
+        .identity__grain {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0.06;
+          mix-blend-mode: overlay;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        }
+
+        .identity__inner {
+          position: relative;
+          max-width: 80rem;
+          margin: 0 auto;
+          padding: 0 clamp(1.25rem, 4vw, 3rem);
+        }
+
+        .identity__eyebrow {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 0.72rem;
+          letter-spacing: 0.45em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+          margin-bottom: 1.25rem;
+        }
+
+        .identity__eyebrow-num {
+          color: #d4433a;
+          font-weight: 500;
+        }
+
+        .identity__eyebrow-dot {
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: rgba(246, 241, 233, 0.42);
+        }
+
+        .identity__eyebrow-meta {
+          margin-left: auto;
+          color: rgba(246, 241, 233, 0.42);
+        }
+
+        .identity__grid {
+          display: grid;
+          grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+          gap: clamp(3rem, 6vw, 6rem);
+          align-items: start;
+        }
+
+        @media (max-width: 900px) {
+          .identity__grid {
+            grid-template-columns: 1fr;
+            gap: 4rem;
+          }
+        }
+
+        .identity__title {
+          font-family: var(--font-display);
+          font-weight: 300;
+          font-size: clamp(3.2rem, 6.5vw, 6rem);
+          line-height: 0.92;
+          letter-spacing: -0.02em;
+          margin: 0 0 clamp(2rem, 3vw, 2.75rem);
+        }
+
+        .identity__title em {
+          font-style: italic;
+          font-weight: 400;
+          position: relative;
+        }
+
+        .identity__title-mark {
+          color: #d4433a;
+          font-style: italic;
+          margin-left: 0.1em;
+        }
+
+        .identity__paragraphs {
+          max-width: 44ch;
+          font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+          line-height: 1.65;
+          color: rgba(246, 241, 233, 0.72);
+        }
+
+        .identity__paragraphs p {
+          margin: 0 0 1.15rem;
+        }
+
+        .identity__lede {
+          color: #f6f1e9;
+          font-size: clamp(1.05rem, 1.15vw, 1.18rem);
+        }
+
+        .identity__paragraphs strong {
+          color: #f6f1e9;
+          font-weight: 500;
+        }
+
+        .identity__paragraphs em {
+          font-style: italic;
+          color: #f6f1e9;
+          font-family: var(--font-display);
+          font-weight: 400;
+        }
+
+        .identity__rule {
+          display: flex;
+          align-items: center;
+          gap: 0.9rem;
+          margin: 2.25rem 0 1.5rem;
+          font-size: 0.7rem;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          color: rgba(246, 241, 233, 0.42);
+        }
+
+        .identity__rule::before {
+          content: '';
+          flex: 0 0 28px;
+          height: 1px;
+          background: rgba(246, 241, 233, 0.42);
+        }
+
+        .identity__facts {
+          margin: clamp(2.5rem, 4vw, 3.5rem) 0 0;
+          padding-top: 1.5rem;
+          border-top: 1px solid rgba(246, 241, 233, 0.14);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.25rem 2rem;
+          max-width: 44ch;
+        }
+
+        .identity__facts dt {
+          font-size: 0.68rem;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(246, 241, 233, 0.42);
+          margin-bottom: 0.25rem;
+        }
+
+        .identity__facts dd {
+          margin: 0;
+          font-size: 0.95rem;
+          color: #f6f1e9;
+        }
+
+        .identity__archives-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(246, 241, 233, 0.14);
+          margin-bottom: 2rem;
+          font-size: 0.7rem;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+        }
+
+        .identity__archives-label {
+          color: #f6f1e9;
+        }
+
+        .identity__archives-count {
+          color: rgba(246, 241, 233, 0.42);
+        }
+
+        .identity__archive-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: clamp(1rem, 1.6vw, 1.5rem);
+        }
+
+        @media (max-width: 720px) {
+          .identity__archive-list {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 480px) {
+          .identity__archive-list {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .archive {
+          animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+          animation-delay: calc(var(--i) * 120ms + 200ms);
+          transform: translateY(var(--offset, 0px));
+        }
+
+        @media (max-width: 720px) {
+          .archive {
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes rise {
+          from {
+            opacity: 0;
+            transform: translateY(calc(var(--offset, 0px) + 18px));
+          }
+          to {
+            opacity: 1;
+            transform: translateY(var(--offset, 0px));
+          }
+        }
+
+        .archive__fig {
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.9rem;
+        }
+
+        .archive__frame {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 4 / 5;
+          overflow: hidden;
+          background: #121215;
+          border: 1px solid rgba(246, 241, 233, 0.14);
+          transition:
+            transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.4s ease;
+        }
+
+        .archive--featured .archive__frame {
+          border-color: rgba(212, 67, 58, 0.18);
+          box-shadow:
+            0 0 0 1px rgba(212, 67, 58, 0.18),
+            0 30px 60px -30px rgba(212, 67, 58, 0.22);
+        }
+
+        .archive__frame::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.35);
+          pointer-events: none;
+        }
+
+        .archive__img {
+          object-fit: contain;
+          transition:
+            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+            filter 0.6s ease;
+          filter: saturate(1.05) contrast(1.02);
+        }
+
+        .archive:hover .archive__frame {
+          transform: translateY(-4px);
+          border-color: rgba(246, 241, 233, 0.3);
+        }
+
+        .archive--featured:hover .archive__frame {
+          border-color: #d4433a;
+        }
+
+        .archive:hover .archive__img {
+          transform: scale(1.02);
+        }
+
+        .archive__badge {
+          position: absolute;
+          top: 0.75rem;
+          left: 0.75rem;
+          z-index: 2;
+          padding: 0.35rem 0.6rem;
+          font-size: 0.62rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: #f6f1e9;
+          background: #d4433a;
+          font-weight: 500;
+        }
+
+        .archive__caption {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .archive__caption-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          gap: 0.75rem;
+          font-size: 0.68rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+        }
+
+        .archive__n {
+          color: #d4433a;
+          font-weight: 500;
+        }
+
+        .archive__kind {
+          color: rgba(246, 241, 233, 0.42);
+          text-align: right;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .archive__title {
+          margin: 0;
+          font-family: var(--font-display);
+          font-weight: 400;
+          font-size: clamp(1rem, 1.15vw, 1.15rem);
+          line-height: 1.2;
+          color: #f6f1e9;
+          letter-spacing: -0.005em;
+        }
+
+        .archive__meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          font-size: 0.82rem;
+          color: rgba(246, 241, 233, 0.72);
+        }
+
+        .archive__sep {
+          color: rgba(246, 241, 233, 0.42);
+        }
+      `}</style>
     </section>
   );
 }
@@ -668,7 +1177,7 @@ function ListenHighlightSection({ artist }: ArtistPageProps) {
   const feature = getPrimaryEmbed(artist.streamingLinks);
 
   return (
-    <section className="press-section section-spotify relative overflow-hidden border-t border-white/12 px-5 py-14 sm:px-8 sm:py-20 lg:px-12 lg:py-20">
+    <section className="press-section section-spotify relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,18,15,0.96),rgba(10,10,10,0.28))]" />
       <div className="ambient-shift absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(241,211,161,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(160,96,66,0.16),transparent_28%)]" />
       <div className="grain-overlay" />
@@ -685,11 +1194,11 @@ function ListenHighlightSection({ artist }: ArtistPageProps) {
         <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="theme-panel-subtle relative flex flex-col justify-between border-b border-white/10 bg-[linear-gradient(180deg,rgba(15,12,11,0.5),rgba(15,12,11,0.18))] p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-8">
             <div>
-              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white">Listen</p>
+              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Listen</p>
               <h2 className="mt-4 text-3xl font-black tracking-[-0.06em] text-white sm:text-4xl lg:text-5xl">
-                Ecouter {artist.stageName}
+                Écouter {artist.stageName}
               </h2>
-              <p className="mt-4 max-w-lg text-sm leading-6 text-white sm:text-base">
+              <p className="mt-4 max-w-lg text-sm leading-7 text-white/75 sm:text-base">
                 {artist.description}
               </p>
             </div>
@@ -710,7 +1219,7 @@ function ListenHighlightSection({ artist }: ArtistPageProps) {
                 href="/listen"
                 className="theme-chip inline-flex rounded-full border border-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white"
               >
-                Full page
+                Tout écouter
               </Link>
             </div>
           </div>
@@ -757,7 +1266,7 @@ function VideoSection({ artist }: { artist: Artist }) {
   return (
     <section
       id="video"
-      className="press-section section-video relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24"
+      className="press-section section-video relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32"
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,14,12,0.95),rgba(8,8,8,0.35))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(243,214,174,0.16),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(179,118,79,0.14),transparent_26%)]" />
@@ -765,12 +1274,12 @@ function VideoSection({ artist }: { artist: Artist }) {
       <div className="paper-texture" />
       <div className="relative z-10 mx-auto max-w-7xl">
         <SectionIntro
-          eyebrow="Videos"
+          eyebrow="Vidéos"
           title="Live et visuels"
-          body={`Une selection de videos pour decouvrir ${artist.stageName} en mouvement, sur scene et dans son univers.`}
+          body={`Une sélection de vidéos pour découvrir ${artist.stageName} en mouvement, sur scène et dans son univers.`}
         />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2 xl:grid-cols-3">
           {artist.videos.map((video, index) => (
             <motion.article
               key={video.title}
@@ -812,7 +1321,7 @@ function VideoSection({ artist }: { artist: Artist }) {
 
               <div className="theme-overlay-panel border-t border-white/10 bg-black/88 p-4 backdrop-blur-md">
                 <h3 className="text-xl font-black tracking-[-0.04em] text-white">{video.title}</h3>
-                <p className="mt-1 text-sm leading-5 text-white">{video.note}</p>
+                <p className="mt-1 text-sm leading-6 text-white/75">{video.note}</p>
               </div>
             </motion.article>
           ))}
@@ -837,7 +1346,7 @@ function GallerySection({ artist }: ArtistPageProps) {
           <SectionIntro
             eyebrow="Galerie"
             title="Univers visuel"
-            body={`Une selection d'images pour decouvrir l'identite visuelle et la presence de ${artist.stageName}.`}
+            body={`Une sélection d'images pour découvrir l'identité visuelle et la présence de ${artist.stageName}.`}
           />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -854,15 +1363,15 @@ function GallerySection({ artist }: ArtistPageProps) {
           </motion.div>
         </div>
 
-        <div className="mt-10 flex gap-4 overflow-x-auto pb-3 sm:mt-12 sm:gap-5 sm:pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {artist.gallery.slice(0, 6).map((image, index) => (
+        <div className="mt-10 flex gap-4 overflow-x-auto pb-3 sm:mt-12 sm:gap-5 sm:pb-4 xl:grid xl:grid-cols-3 xl:overflow-x-visible xl:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {[artist.gallery[3], artist.gallery[4], artist.gallery[6]].map((image, index) => (
             <motion.div
               key={image.src}
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: index * 0.05, ease: smoothEase }}
-              className="theme-panel group relative w-[78vw] flex-none overflow-hidden rounded-[1.75rem] border border-white/10 sm:w-[24rem] lg:w-[26rem]"
+              className="theme-panel group relative w-[78vw] flex-none overflow-hidden rounded-[1.75rem] border border-white/10 sm:w-[24rem] lg:w-[26rem] xl:w-auto"
             >
               <div className="relative aspect-[4/5]">
                 <Image
@@ -874,51 +1383,11 @@ function GallerySection({ artist }: ArtistPageProps) {
                 />
                 <div className="theme-image-overlay absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
                 <div className="theme-overlay-panel absolute bottom-0 left-0 right-0 rounded-t-[1.25rem] bg-black/30 p-5 backdrop-blur-md">
-                  <p className="text-xs uppercase tracking-[0.28em] text-white">0{index + 1}</p>
+                  <p className="text-xs uppercase tracking-[0.28em] text-white/52">0{index + 1}</p>
                   <p className="mt-2 text-lg font-medium text-white">{image.caption}</p>
                 </div>
               </div>
             </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PressQuotesSection({ artist }: { artist: Artist }) {
-  if (artist.pressQuotes.length === 0) {
-    return null;
-  }
-
-  return (
-    <section className="press-section section-press relative overflow-hidden border-t border-white/12 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(21,16,14,0.96),rgba(10,9,9,0.22))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(170,120,87,0.16),transparent_24%),radial-gradient(circle_at_right,rgba(232,198,154,0.14),transparent_26%)]" />
-      <div className="grain-overlay" />
-      <div className="paper-texture" />
-      <div className="relative z-10 mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Press"
-          title="Quotes et positionnement"
-          body="Une couche editoriale legere pour la presse, le booking et la lecture rapide du projet."
-        />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {artist.pressQuotes.map((quote, index) => (
-            <motion.article
-              key={`${quote.source}-${index}`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.65, delay: index * 0.08, ease: smoothEase }}
-              className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6"
-            >
-              <p className="text-[0.65rem] uppercase tracking-[0.35em] text-white">{quote.kind}</p>
-              <h3 className="mt-4 text-2xl font-black tracking-[-0.04em] text-white">
-                {quote.source}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-white">&ldquo;{quote.quote}&rdquo;</p>
-            </motion.article>
           ))}
         </div>
       </div>
@@ -966,22 +1435,22 @@ function ContactSection({ artist }: { artist: Artist }) {
   return (
     <section
       id="contact"
-      className="press-section section-contact relative overflow-hidden border-t border-white/12 px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-20 lg:px-12 lg:pb-32 lg:pt-32"
+      className="press-section section-contact relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-32"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(61,42,28,0.62),rgba(12,12,12,0.3))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(232,198,154,0.16),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(141,97,67,0.16),transparent_28%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.05))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,11,10,0.97),rgba(8,7,7,0.42))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(241,211,161,0.07),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(130,88,59,0.10),transparent_30%)]" />
       <div className="grain-overlay" />
       <div className="paper-texture" />
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 border-t border-white/10 pt-10 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14 lg:pt-14">
+
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
         <div>
-          <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white">Contact</p>
+          <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Contact</p>
           <h2 className="mt-5 max-w-xl text-4xl font-black tracking-[-0.06em] text-white sm:text-5xl lg:text-7xl">
-            Contact
+            Travailler ensemble
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-7 text-white sm:text-lg">
-            Pour toute demande professionnelle, booking ou prise de contact, voici les coordonnees
-            dediees a {artist.stageName}.
+          <p className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg">
+            Pour toute demande professionnelle, booking ou prise de contact, voici les coordonnées
+            dédiées à {artist.stageName}.
           </p>
         </div>
 
@@ -1021,6 +1490,43 @@ function ContactSection({ artist }: { artist: Artist }) {
   );
 }
 
+function SiteFooter({ artist }: { artist: Artist }) {
+  const year = new Date().getFullYear();
+  return (
+    <footer className="relative border-t border-black/8 bg-white px-5 py-10 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-black tracking-[0.32em] text-black uppercase">
+            {artist.stageName}
+          </p>
+          <p className="mt-1.5 text-[0.68rem] tracking-[0.18em] text-black/32">
+            © {year} · Tous droits réservés
+          </p>
+        </div>
+        <nav className="flex items-center gap-6">
+          {artist.socials.map((social) => (
+            <a
+              key={social.platform}
+              href={social.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[0.68rem] uppercase tracking-[0.28em] text-black/38 transition-colors hover:text-[#f1d3a1]"
+            >
+              {social.platform}
+            </a>
+          ))}
+          <a
+            href={`mailto:${artist.bookingEmail}`}
+            className="text-[0.68rem] uppercase tracking-[0.28em] text-black/38 transition-colors hover:text-[#f1d3a1]"
+          >
+            Booking
+          </a>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
 export function ArtistHomePage({ artist }: ArtistPageProps) {
   return (
     <div className="site-shell relative overflow-x-hidden bg-[#0b0908] text-white" data-site-theme="dark">
@@ -1028,18 +1534,56 @@ export function ArtistHomePage({ artist }: ArtistPageProps) {
       <main className="page-main relative">
         <ListenHighlightSection artist={artist} />
         <AboutSection artist={artist} />
+        <WhoIsMartinaSection artist={artist} />
         <VideoSection artist={artist} />
         <GallerySection artist={artist} />
-        <PressQuotesSection artist={artist} />
         <ContactSection artist={artist} />
       </main>
+      <SiteFooter artist={artist} />
     </div>
   );
 }
 
 export function ArtistGalleryPage({ artist }: ArtistPageProps) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const isOpen = lightboxIndex !== null;
+  const current = lightboxIndex !== null ? artist.gallery[lightboxIndex] : null;
+
+  const handleDownload = async (src: string, caption: string) => {
+    try {
+      const res = await fetch(src);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${caption || 'martina'}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      window.open(src, '_blank');
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIndex(null);
+      if (e.key === 'ArrowRight') setLightboxIndex((i) => i !== null ? Math.min(i + 1, artist.gallery.length - 1) : null);
+      if (e.key === 'ArrowLeft') setLightboxIndex((i) => i !== null ? Math.max(i - 1, 0) : null);
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, artist.gallery.length]);
+
   return (
     <main className="gallery-shell relative min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#19110d_0%,#241814_22%,#16100d_48%,#0d0908_100%)] text-white">
+      <SiteHeader artist={artist} prefixAnchors />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(233,198,154,0.16),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(155,98,66,0.14),transparent_24%)]" />
       <div className="grain-overlay" />
       <div className="film-vignette" />
@@ -1051,24 +1595,24 @@ export function ArtistGalleryPage({ artist }: ArtistPageProps) {
             href="/"
             className="theme-chip inline-flex items-center rounded-full border border-white/15 bg-white/8 px-5 py-2 text-xs font-bold uppercase tracking-[0.3em] text-white transition-colors hover:bg-white/12"
           >
-            Back to press kit
+            ← Retour
           </Link>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
             <div>
-              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white">Galerie</p>
-              <h1 className="mt-4 text-5xl font-black tracking-[-0.07em] text-white sm:text-6xl lg:text-8xl">
+              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Galerie</p>
+              <h1 className="mt-4 text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-8xl">
                 {artist.stageName}
               </h1>
-              <p className="theme-overlay-panel mt-5 max-w-xl rounded-[1.25rem] bg-black/24 p-4 text-base leading-7 text-white backdrop-blur-sm sm:text-lg">
-                A curated gallery for press, booking, and visual reference.
+              <p className="theme-overlay-panel mt-5 max-w-xl rounded-[1.25rem] bg-black/24 p-4 text-base leading-7 text-white/75 backdrop-blur-sm sm:text-lg">
+                Chaque image est un fragment de l&apos;univers de Martina — scène, lumière, présence.
               </p>
             </div>
 
             <div className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-white">Image selection</p>
-              <p className="mt-3 text-sm leading-6 text-white">
-                Visuals remain isolated per artist, while the page system stays shared and reusable.
+              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Usage éditorial</p>
+              <p className="mt-3 text-sm leading-7 text-white/75">
+                Fichiers disponibles sur demande pour tout projet presse, booking ou communication visuelle.
               </p>
             </div>
           </div>
@@ -1084,7 +1628,8 @@ export function ArtistGalleryPage({ artist }: ArtistPageProps) {
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: index * 0.05, ease: smoothEase }}
-              className="theme-panel group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04]"
+              className="theme-panel group cursor-pointer overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04]"
+              onClick={() => setLightboxIndex(index)}
             >
               <div className="relative aspect-[4/5]">
                 <Image
@@ -1096,15 +1641,114 @@ export function ArtistGalleryPage({ artist }: ArtistPageProps) {
                 />
                 <div className="theme-image-overlay absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
                 <div className="film-vignette" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="rounded-full bg-black/50 p-3 backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
               </div>
               <figcaption className="theme-overlay-panel border-t border-white/10 bg-black/28 p-5 backdrop-blur-md">
-                <p className="text-xs uppercase tracking-[0.28em] text-white">Image {index + 1}</p>
-                <p className="mt-2 text-lg text-white">{image.caption}</p>
+                <p className="text-xs uppercase tracking-[0.28em] text-white/52">0{index + 1}</p>
+                <p className="mt-2 text-lg font-medium text-white">{image.caption}</p>
               </figcaption>
             </motion.figure>
           ))}
         </div>
       </section>
+      <SiteFooter artist={artist} />
+
+      {/* Lightbox */}
+      {isOpen && current && (
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/92 backdrop-blur-xl"
+            onClick={() => setLightboxIndex(null)}
+          />
+
+          {/* Controls top */}
+          <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 sm:px-8">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/45">
+              {(lightboxIndex ?? 0) + 1} / {artist.gallery.length}
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); handleDownload(current.src, current.caption); }}
+                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/80 backdrop-blur-sm transition-colors hover:bg-white/14 hover:text-white"
+              >
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 3v13M7 11l5 5 5-5M3 19h18" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Télécharger
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/8 text-white/70 backdrop-blur-sm transition-colors hover:bg-white/14 hover:text-white"
+                aria-label="Fermer"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="relative z-10 flex h-full w-full items-center justify-center px-16 py-20 sm:px-24">
+            <div className="relative h-full w-full">
+              <Image
+                src={current.src}
+                alt={current.alt}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                quality={90}
+              />
+            </div>
+          </div>
+
+          {/* Caption bottom */}
+          <div className="absolute inset-x-0 bottom-0 z-10 px-5 py-5 sm:px-8">
+            <p className="text-center text-sm text-white/60">{current.caption}</p>
+          </div>
+
+          {/* Prev */}
+          {(lightboxIndex ?? 0) > 0 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i ?? 0) - 1); }}
+              className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white/70 backdrop-blur-sm transition-colors hover:bg-black/70 hover:text-white sm:left-5"
+              aria-label="Précédent"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+
+          {/* Next */}
+          {(lightboxIndex ?? 0) < artist.gallery.length - 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i ?? 0) + 1); }}
+              className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white/70 backdrop-blur-sm transition-colors hover:bg-black/70 hover:text-white sm:right-5"
+              aria-label="Suivant"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+        </motion.div>
+      )}
     </main>
   );
 }
@@ -1114,66 +1758,89 @@ export function ArtistListenPage({ artist }: ArtistPageProps) {
 
   return (
     <main className="gallery-shell relative min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#120d0b_0%,#211612_22%,#140f0d_54%,#0d0908_100%)] text-white">
+      <SiteHeader artist={artist} prefixAnchors />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(233,198,154,0.16),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(155,98,66,0.14),transparent_24%)]" />
       <div className="grain-overlay" />
       <div className="film-vignette" />
       <div className="paper-texture" />
+      <div className="warm-spotlight left-[-6rem] top-[8%]" />
 
-      <section className="relative overflow-hidden border-b border-white/12 px-5 pb-14 pt-28 sm:px-8 lg:px-12 lg:pb-20 lg:pt-32">
+      {/* Header */}
+      <section className="relative overflow-hidden border-b border-white/10 px-5 pb-12 pt-28 sm:px-8 lg:px-12 lg:pb-16 lg:pt-32">
         <div className="relative z-10 mx-auto max-w-7xl">
-          <Link
-            href="/"
-            className="theme-chip inline-flex items-center rounded-full border border-white/15 bg-white/8 px-5 py-2 text-xs font-bold uppercase tracking-[0.3em] text-white transition-colors hover:bg-white/12"
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: smoothEase }}
           >
-            Back to press kit
-          </Link>
+            <Link
+              href="/"
+              className="theme-chip inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-5 py-2 text-xs font-bold uppercase tracking-[0.3em] text-white/80 transition-colors hover:bg-white/12"
+            >
+              ← Retour
+            </Link>
+          </motion.div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-            <div>
-              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white">Listen</p>
-              <h1 className="mt-4 text-5xl font-black tracking-[-0.07em] text-white sm:text-6xl lg:text-8xl">
+          <div className="mt-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: smoothEase }}
+            >
+              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Écouter</p>
+              <h1 className="mt-4 text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-8xl">
                 {artist.stageName}
               </h1>
-              <p className="theme-overlay-panel mt-5 max-w-xl rounded-[1.25rem] bg-black/24 p-4 text-base leading-7 text-white backdrop-blur-sm sm:text-lg">
-                Streaming links, featured embed and editorial cues stay artist-specific while the UI remains shared.
+              <p className="mt-5 max-w-lg text-base leading-7 text-white/75 sm:text-lg">
+                {artist.tagline}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-white">Primary links</p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                {artist.streamingLinks.map((link) => (
-                  <a
-                    key={link.platform}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="theme-chip rounded-full border border-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white"
-                  >
-                    {link.platform}
-                  </a>
-                ))}
-              </div>
-            </div>
+            <motion.div
+              className="flex flex-wrap gap-3 lg:justify-end"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: smoothEase }}
+            >
+              {artist.streamingLinks.map((link) => (
+                <a
+                  key={link.platform}
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="theme-chip rounded-full border border-white/15 bg-white/6 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.24em] text-white/85 transition-colors hover:bg-white/12 hover:text-white"
+                >
+                  {link.platform}
+                </a>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      <section className="relative px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="theme-embed-shell overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/25">
+      {/* Embed + sidebar */}
+      <section className="relative px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+
+          {/* Primary embed */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.2, ease: smoothEase }}
+            className="theme-embed-shell overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/25"
+          >
             {primaryEmbed?.embedUrl ? (
               <iframe
                 title={primaryEmbed.label}
                 src={primaryEmbed.embedUrl}
                 width="100%"
-                height="480"
+                height="520"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
                 className="block"
               />
             ) : (
-              <div className="relative h-[480px]">
+              <div className="relative h-[520px]">
                 <Image
                   src={artist.heroImage.src}
                   alt={artist.heroImage.alt}
@@ -1184,34 +1851,72 @@ export function ArtistListenPage({ artist }: ArtistPageProps) {
                 <div className="theme-image-overlay absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
               </div>
             )}
-          </div>
+          </motion.div>
 
+          {/* Sidebar */}
           <div className="space-y-5">
-            <div className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6">
-              <p className="text-[0.72rem] uppercase tracking-[0.32em] text-white">Artist positioning</p>
-              <h2 className="mt-4 text-3xl font-black tracking-[-0.05em] text-white">
+            {/* Bio */}
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.35, ease: smoothEase }}
+              className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6"
+            >
+              <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Biographie</p>
+              <p className="mt-4 text-xl font-black leading-snug tracking-[-0.03em] text-white sm:text-2xl">
                 {artist.shortBio}
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-white">{artist.longBio}</p>
-            </div>
+              </p>
+              <p className="mt-4 text-sm leading-7 text-white/75">{artist.longBio}</p>
+            </motion.div>
 
-            <div className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6">
-              <p className="text-[0.72rem] uppercase tracking-[0.32em] text-white">Press quotes</p>
-              <div className="mt-4 space-y-4">
-                {artist.pressQuotes.map((quote, index) => (
-                  <div
-                    key={`${quote.source}-${index}`}
-                    className="border-t border-white/10 pt-4 first:border-t-0 first:pt-0"
-                  >
-                    <p className="text-xs uppercase tracking-[0.28em] text-white">{quote.source}</p>
-                    <p className="mt-2 text-sm leading-7 text-white">&ldquo;{quote.quote}&rdquo;</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* Press quotes */}
+            {artist.pressQuotes.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.75, delay: 0.5, ease: smoothEase }}
+                className="theme-panel rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6"
+              >
+                <p className="text-[0.72rem] uppercase tracking-[0.45em] text-white/55">Citations presse</p>
+                <div className="mt-5 space-y-5">
+                  {artist.pressQuotes.map((quote, index) => (
+                    <div
+                      key={`${quote.source}-${index}`}
+                      className="border-t border-white/8 pt-5 first:border-t-0 first:pt-0"
+                    >
+                      <p className="text-base leading-7 text-white/85 italic">
+                        &ldquo;{quote.quote}&rdquo;
+                      </p>
+                      <p className="mt-2 text-[0.68rem] uppercase tracking-[0.3em] text-white/42">
+                        {quote.source} · {quote.kind}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Key stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.62, ease: smoothEase }}
+              className="grid grid-cols-3 gap-3"
+            >
+              {artist.highlights.map((h) => (
+                <div
+                  key={h.label}
+                  className="theme-overlay-panel rounded-[1.25rem] border border-white/10 bg-black/22 p-4 backdrop-blur-md"
+                >
+                  <p className="text-[0.62rem] uppercase tracking-[0.26em] text-white/48">{h.label}</p>
+                  <p className="mt-2 text-2xl font-black tracking-[-0.04em] text-white">{h.value}</p>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
+      <SiteFooter artist={artist} />
     </main>
   );
 }
