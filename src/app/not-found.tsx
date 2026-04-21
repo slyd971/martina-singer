@@ -12,7 +12,7 @@ export default function NotFound() {
           Artist not found
         </h1>
         <p className="mt-6 text-base leading-7 text-white/80 sm:text-lg">
-          La page demandee est introuvable. Retournez au press kit principal de Martina.
+          La page demandée est introuvable. Retournez au press kit principal de Martina.
         </p>
         <Link
           href="/"

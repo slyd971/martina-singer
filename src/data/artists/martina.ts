@@ -6,66 +6,66 @@ export const martinaArtist: Artist = {
   vercelSubdomain: 'martina-presskit.vercel.app',
   name: 'Martina Bellucci',
   stageName: 'Martina',
-  tagline: "L'elegance soul au service de la house contemporaine.",
+  tagline: "L'élégance soul au service de la house contemporaine.",
   city: 'Paris',
   country: 'France',
   category: 'Singer',
   genre: 'Soul House',
   description:
-    "Press kit premium de Martina, artiste live entre soul, house contemporaine et storytelling visuel.",
+    "Une voix qui habite l'espace. Martina traverse la soul et la house contemporaine avec une présence scénique construite dès l'enfance — entre danse, théâtre et liberté.",
   shortBio:
-    "Martina construit un projet musical elegant, sensible et visuel, pense pour la scene, la presse et le booking premium.",
+    "Martina construit un projet musical élégant, sensible et visuel, pensé pour la scène, la presse et le booking premium.",
   longBio:
-    "Martina deploie un univers ou la voix, le mouvement et l'image avancent ensemble. Son projet melange emotion soul, textures house contemporaines et presence scenique maitrisée. Chaque sortie, chaque live session et chaque visuel prolonge la meme intention: installer une identite premium, forte et immediate, capable de parler autant au public qu'aux programmateurs, medias et partenaires.",
+    "Martina déploie un univers où la voix, le mouvement et l'image avancent ensemble. Son projet mélange émotion soul, textures house contemporaines et présence scénique maîtrisée. Chaque sortie, chaque live session et chaque visuel prolonge la même intention : installer une identité premium, forte et immédiate, capable de parler autant au public qu'aux programmateurs, médias et partenaires.",
   heroImage: {
     src: '/martina/hero-martina.jpeg',
-    alt: 'Martina en portrait hero pour le press kit premium',
+    alt: 'Martina en portrait héro pour le press kit premium',
   },
   gallery: [
     {
       src: '/martina/gallery-1.jpg',
-      alt: 'Martina en scene sous lumiere rouge',
-      caption: 'Presence scenique',
+      alt: 'Martina en scène sous lumière rouge',
+      caption: 'Feu rouge',
     },
     {
       src: '/martina/gallery-2.JPG',
-      alt: 'Portrait editorial de Martina',
-      caption: 'Portrait editorial',
+      alt: 'Portrait éditorial de Martina',
+      caption: 'Studio',
     },
     {
       src: '/martina/gallery-3.jpeg',
-      alt: 'Martina sur scene sous lumiere bleue',
-      caption: 'Live bleu',
+      alt: 'Martina sur scène sous lumière bleue',
+      caption: 'Live',
     },
     {
       src: '/martina/gallery-4.jpeg',
-      alt: 'Martina dans une ambiance violette sur scene',
-      caption: 'Silhouette live',
+      alt: 'Martina dans une ambiance violette sur scène',
+      caption: 'Live',
     },
     {
       src: '/martina/gallery-5.jpeg',
       alt: 'Portrait concept de Martina',
-      caption: 'Visuel concept',
+      caption: 'Éclats',
     },
     {
       src: '/martina/gallery-6.jpeg',
       alt: 'Visuel studio de Martina',
-      caption: 'Visuel studio',
+      caption: 'Chrome',
     },
     {
       src: '/martina/gallery-7.jpeg',
-      alt: 'Martina en prise editoriale contrastee',
-      caption: 'Editorial live',
+      alt: 'Martina en prise éditoriale contrastée',
+      caption: 'Ground Control',
     },
     {
       src: '/martina/gallery-8.jpeg',
       alt: 'Martina dans une ambiance noir et or',
-      caption: 'Noir et or',
+      caption: 'Backstage',
     },
     {
       src: '/martina/gallery-9.jpeg',
-      alt: 'Martina en portrait profile',
-      caption: 'Portrait profile',
+      alt: 'Martina en portrait profil',
+      caption: 'Scène libre',
     },
   ],
   socials: [
@@ -94,13 +94,8 @@ export const martinaArtist: Artist = {
     },
     {
       platform: 'Apple Music',
-      label: 'Ecouter sur Apple Music',
-      url: 'https://music.apple.com/fr/artist/martina/1777777777',
-    },
-    {
-      platform: 'Deezer',
-      label: 'Profil Deezer',
-      url: 'https://www.deezer.com/fr/artist/123456789',
+      label: 'Écouter sur Apple Music',
+      url: 'https://music.apple.com/fr/artist/martina/1619828881',
     },
   ],
   bookingEmail: 'martinablbusiness@gmail.com',
@@ -118,17 +113,17 @@ export const martinaArtist: Artist = {
     {
       label: 'Streams',
       value: '128K+',
-      detail: 'Ecoutes cumulees sur les sorties actuellement actives.',
+      detail: 'Écoutes cumulées sur les sorties actuellement actives.',
     },
     {
       label: 'Instagram',
       value: '18K',
-      detail: 'Communaute visuelle engagee autour du projet.',
+      detail: 'Communauté visuelle engagée autour du projet.',
     },
     {
       label: 'Live',
       value: '12',
-      detail: 'Dates privees, showcases et apparitions live recentes.',
+      detail: 'Dates privées, showcases et apparitions live récentes.',
     },
   ],
   pressQuotes: [
@@ -136,31 +131,31 @@ export const martinaArtist: Artist = {
       source: 'Editorial Note',
       kind: 'Press angle',
       quote:
-        "Une voix soul contemporaine avec une direction visuelle assez forte pour tenir autant sur scene qu'en presse.",
+        "Une voix soul contemporaine avec une direction visuelle assez forte pour tenir autant sur scène qu'en presse.",
     },
     {
       source: 'Booking Deck',
       kind: 'Positioning',
       quote:
-        "Le projet Martina se distingue par une execution premium, pensee pour des environnements live, brand et event haut de gamme.",
+        "Le projet Martina se distingue par une exécution premium, pensée pour des environnements live, brand et event haut de gamme.",
     },
   ],
   videos: [
     {
       title: 'Live session 01',
-      note: 'Performance live de Martina, entre presence scenique et intensite vocale.',
+      note: 'Performance live de Martina, entre présence scénique et intensité vocale.',
       embedId: 'DlqpLlqjkyM',
       cover: '/martina/gallery-3.jpeg',
     },
     {
       title: 'Live session 02',
-      note: "Une autre facette du projet, portee par la voix, l'emotion et le groove.",
+      note: "Une autre facette du projet, portée par la voix, l'émotion et le groove.",
       embedId: 'rDJ-cVKNJxA',
       cover: '/martina/gallery-4.jpeg',
     },
     {
       title: 'Live session 03',
-      note: "Une video qui prolonge l'univers de Martina dans une esthetique plus frontale.",
+      note: "Une vidéo qui prolonge l'univers de Martina dans une esthétique plus frontale.",
       embedId: 'h8dalM6XkjE',
       cover: '/martina/gallery-5.jpeg',
     },
@@ -168,7 +163,7 @@ export const martinaArtist: Artist = {
   seo: {
     title: 'Martina | Press kit artiste premium',
     description:
-      'Press kit officiel de Martina: bio, galerie, videos, streaming et contact booking dans un univers premium.',
+      'Press kit officiel de Martina : bio, galerie, vidéos, streaming et contact booking dans un univers premium.',
     keywords: ['Martina', 'press kit artiste', 'soul house', 'booking artiste', 'live performer'],
     ogImage: '/martina/hero-martina.jpeg',
   },
